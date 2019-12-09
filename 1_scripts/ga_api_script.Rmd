@@ -41,7 +41,7 @@ account_list <- ga_account_list()
 account_list$viewId
 
 #Select the one you want to work with
-my_ga_id <- 123456
+my_ga_id <- 102407343
 
 #Call the API to access the data you require
 google_analytics(my_ga_id, 
