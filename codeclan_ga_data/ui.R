@@ -20,7 +20,10 @@ ui <- dashboardPage(
       menuItem("Goal completions by Page", tabName = "goal_page", icon = icon("dashboard")),
       menuItem("User Journey", tabName = "user_journey", icon = icon("dashboard")),
       menuItem("User Aquisitions", tabName = "user_aquisitions", icon = icon("dashboard")),
+      # Adding blank menuItem to give space for dateRangeInput
+      menuItem(""),
       # Adding date picker that allows users to select specific date range and the plot automatically updates itself
+      
       dateRangeInput(
 
         # InputId to link up date picker code within the server function
