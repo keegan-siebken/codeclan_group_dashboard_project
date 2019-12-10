@@ -1,7 +1,13 @@
+
 #Accessing libraries
 library(googleAnalyticsR)
 library(keyring)
+library(janitor)
+library(tidyverse)
+library(lubridate)
+library(scales)
 
+keyring_unlock(keyring = "googleanalytics")
 # Setting options(googleAuthR.client_id) and options(googleAuthR.client_secret) to activate API call
 options(googleAuthR.client_id = keyring::key_get(service = "ga_client_id", keyring = "googleanalytics"))
 options(googleAuthR.client_secret = keyring::key_get(service = "ga_client_secret", keyring = "googleanalytics"))
@@ -10,10 +16,56 @@ options(googleAuthR.client_secret = keyring::key_get(service = "ga_client_secret
 devtools::reload(pkg = devtools::inst("googleAnalyticsR"))
 
 #Authenticating account
+# ga_auth(email = keyring:: key_get(service = "email", keyring = "googleanalytics"))
+
 ga_auth()
 
-#Select all CodeClan website data
+keyring_lock(keyring = "googleanalytics")
+
+#Get a list of accounts you have access to
+account_list <- ga_account_list()
+
+account_list
+
+#ViewID is the way to access the account you want
+account_list$viewId
+
+#Select the one you want to work with
 my_ga_id <- 102407343
+
+#Call the API to access the data you require
+google_analytics(my_ga_id,
+                 date_range = c("2018-12-01", "2019-12-01"),
+                 metrics = c(
+                   "sessions",
+                   "bounces",
+                   "bounceRate",
+                   "exitRate", 
+                   "avgTimeOnPage", 
+                   "goal3Completions", 
+                   "goal5Completions"),
+                 dimensions = c(
+                   "date",
+                   "channelGrouping",
+                   "source",
+                   "goalCompletionLocation",
+                   "goalPreviousStep1",
+                   "goalPreviousStep2",
+                   "deviceCategory", 
+                   "landingPagePath", 
+                   "secondPagePath", 
+                   "exitPagePath"
+                 ),
+                 max = -1,
+                 anti_sample = TRUE
+)
+
+
+
+
+
+
+
 
 #Call the API to access the data you require
 google_analytics(my_ga_id, 
