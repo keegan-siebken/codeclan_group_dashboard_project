@@ -16,7 +16,6 @@ options(googleAuthR.client_secret = keyring::key_get(service = "ga_client_secret
 devtools::reload(pkg = devtools::inst("googleAnalyticsR"))
 
 #Authenticating account
-# ga_auth(email = keyring:: key_get(service = "email", keyring = "googleanalytics"))
 
 ga_auth()
 
@@ -67,8 +66,8 @@ google_analytics(my_ga_id,
 
 
 
-#Call the API to access the data you require
-google_analytics(my_ga_id, 
-                 date_range = c("2019-01-01", "2019-03-01"), 
-                 metrics = "sessions", 
-                 dimensions = "date")
+# #Call the API to access the data you require
+# google_analytics(my_ga_id, 
+#                  date_range = c("2019-01-01", "2019-03-01"), 
+#                  metrics = "sessions", 
+#                  dimensions = "date")
