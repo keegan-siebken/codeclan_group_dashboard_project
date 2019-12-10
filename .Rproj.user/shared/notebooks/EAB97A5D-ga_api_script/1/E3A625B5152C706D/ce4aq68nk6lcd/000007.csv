@@ -1,9 +1,0 @@
-"0","sessions <- google_analytics(my_ga_id, 
-                 date_range = c(""2019-01-01"", ""2019-03-01""), 
-                 metrics = ""sessions"", 
-                 dimensions = ""date"")
-"
-"2","2019-12-06 21:45:50> Reading cache
-"
-"2","2019-12-06 21:45:50> Downloaded [60] rows from a total of [60].
-"
