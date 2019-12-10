@@ -4,43 +4,99 @@ library(shinydashboard)
 
 source("global.R")
 
-ui <- dashboardPage(skin = "black",
-                    
-                    dashboardHeader(title = div("CodeClan website navigation analytics", 
-                                                style = "color: #1b3445; 
+ui <- dashboardPage(
+  skin = "black",
+
+  dashboardHeader(
+    title = div("CodeClan website navigation analytics",
+      style = "color: #1b3445; 
                                     font-size: 20px; 
-                                    text-align: left"),
-                                    titleWidth = 350),
-                    
-                    dashboardSidebar(
-                        sidebarMenu(
-                            menuItem("Goal completions by Channel", tabName = "goal_channel", icon = icon("dashboard")),
-                            menuItem("Goal completions by Page", tabName = "goal_page", icon = icon("dashboard")),
-                            menuItem("User Journey", tabName = "user_journey", icon = icon("dashboard")),
-                            menuItem("User Aquisitions", tabName = "user_aquisitions", icon = icon("dashboard"),
-                            )
-                        )
-                    ),
-                    
-                    dashboardBody(
-                        tabItems(
-                            tabItem(tabName = "goal_channel",
-                                    # Keegan insert code here        
-                            ),
-                            
-                            tabItem(tabName = "goal_page",
-                                    # Amber insert code here        
-                            ),
-                            
-                            tabItem(tabName = "user_journey",
-                                    # Stewart insert code here
-                            ),
-                            
-                            tabItem(tabName = "user_aquisitions",
-                                    # Greg insert code here
-                            )
-                        )
-                    )
+                                    text-align: left"
+    ),
+    titleWidth = 350
+  ),
+
+  dashboardSidebar(
+    sidebarMenu(
+      menuItem("Goal completions by Channel", tabName = "goal_channel", icon = icon("dashboard")),
+      menuItem("Goal completions by Page", tabName = "goal_page", icon = icon("dashboard")),
+      menuItem("User Journey", tabName = "user_journey", icon = icon("dashboard")),
+      menuItem("User Aquisitions", tabName = "user_aquisitions", icon = icon("dashboard")),
+      # Adding date picker that allows users to select specific date range and the plot automatically updates itself
+      dateRangeInput(
+
+        # InputId to link up date picker code within the server function
+        inputId = "date",
+
+        # Setting "Select date range" subheader to a h5 header and bold
+        label = tags$b(tags$h5("Select date range")),
+
+        # Start date in the date picker is by default is set to the first date that is found within the date column of iot_data
+        start = NULL,
+        # sample code for setting first date - use when API is ready:
+        # first(iot_data$date),
+
+        # End date in the date picker by default is set to the last date found within the date column of iot_date
+        end = NULL,
+        # Again, sample code for last date below:
+        # last(iot_data$date),
+
+        #  min and max values are set to prevent users selecting values  in date picker that are outwith the dates available in iot_data
+        min = NULL,
+        # sample code below - use when API ready:
+        # first(iot_data$date),
+        max = NULL
+        # sample code below - use when API ready:
+        # last(iot_data$date)
+      )
+    )
+  ),
+
+  dashboardBody(
+    tabItems(
+      tabItem(
+        tabName = "goal_channel",
+        # Keegan insert code here
+        fluidRow(
+          box(
+            title = "Channel Conversions Graph",
+            width = 9,
+            "Channel Graph Content"
+          ),
+          box(
+            title = "Channel Conversions Table",
+            width = 3,
+            "Channel Conversions Table Content"
+          )
+        ),
+        fluidRow(
+          box(
+            title = "Social Media Conversions Graph",
+            width = 9,
+            "Social Media Graph Content"
+          ),
+          box(
+            title = "Social Media Conversions Table",
+            width = 3,
+            "Social Media Conversions Table Content"
+          )
+        )
+      ),
+
+      tabItem(
+        tabName = "goal_page",
+        # Amber insert code here
+      ),
+
+      tabItem(
+        tabName = "user_journey",
+        # Stewart insert code here
+      ),
+
+      tabItem(
+        tabName = "user_aquisitions",
+        # Greg insert code here
+      )
+    )
+  )
 )
-
-

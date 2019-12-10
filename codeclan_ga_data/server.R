@@ -5,4 +5,5 @@ server <- function(input, output) {
 
 }
 
-shinyApp(ui, server)
+# including the below causes my app to crash:
+# shinyApp(ui, server)
