@@ -26,26 +26,26 @@ ui <- dashboardPage(
       dateRangeInput(
 
         # InputId to link up date picker code within the server function
-        inputId = "date",
+        inputId = "date_range",
 
         # Setting "Select date range" subheader to a h5 header and bold
         label = tags$b(tags$h5("Select date range")),
 
         # Start date in the date picker is by default is set to the first date that is found within the date column of iot_data
-        start = NULL,
+        start = (today() - days(365)),
         # sample code for setting first date - use when API is ready:
         # first(iot_data$date),
 
         # End date in the date picker by default is set to the last date found within the date column of iot_date
-        end = NULL,
+        end = today(),
         # Again, sample code for last date below:
         # last(iot_data$date),
 
         #  min and max values are set to prevent users selecting values  in date picker that are outwith the dates available in iot_data
-        min = NULL,
+        min = (today() - days(365)),
         # sample code below - use when API ready:
         # first(iot_data$date),
-        max = NULL
+        max = today()
         # sample code below - use when API ready:
         # last(iot_data$date)
       )
