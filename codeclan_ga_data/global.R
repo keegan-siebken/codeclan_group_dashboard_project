@@ -38,7 +38,6 @@ account_list$viewId
 #Select the one you want to work with
 my_ga_id <- 102407343
 
-<<<<<<< HEAD
 #Call the API to access the data required for various dashboards
 dashboard_data <- google_analytics(my_ga_id,
                  date_range = c("2018-12-01", "2019-12-01"),
@@ -69,7 +68,8 @@ goal_path_data <- google_analytics(my_ga_id,
                                    date_range = c("2018-12-01", "2019-12-01"),
                                    metrics = c(
                                      "goal3Completions",
-                                     "goal5Completions"),
+                                     "goal5Completions"
+                                     ),
                                    dimensions = c(
                                      "date",
                                      "goalCompletionLocation",
@@ -147,7 +147,7 @@ clean_goal_path_data <- goal_path_data %>%
     ) %>%
   rename (
     edin_info_session_click_completions = goal5completions,
-    glas_info_session_click_completions = goal3completions,
+    glas_info_session_click_completions = goal3completions
   )
 
 
