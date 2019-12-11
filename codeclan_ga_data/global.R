@@ -1,4 +1,3 @@
-view(meta)
 # Section 1 - Loading libraries-------------------------------------
 
 library(googleAnalyticsR)
