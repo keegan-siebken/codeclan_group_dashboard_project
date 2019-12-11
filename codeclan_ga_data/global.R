@@ -1,4 +1,4 @@
-
+view(meta)
 # Section 1 - Loading libraries-------------------------------------
 
 library(googleAnalyticsR)
@@ -51,6 +51,7 @@ year_previous <- today() - days(365)
 dashboard_data <- google_analytics(my_ga_id,
                  date_range = c(year_previous, today),
                  metrics = c(
+                   "users",
                    "sessions",
                    "bounces",
                    "bounceRate",
@@ -77,7 +78,8 @@ goal_path_data <- google_analytics(my_ga_id,
                                    date_range = c(year_previous, today),
                                    metrics = c(
                                      "goal3Completions",
-                                     "goal5Completions"),
+                                     "goal5Completions"
+                                     ),
                                    dimensions = c(
                                      "date",
                                      "goalCompletionLocation",
@@ -155,7 +157,7 @@ clean_goal_path_data <- goal_path_data %>%
     ) %>%
   rename (
     edin_info_session_click_completions = goal5completions,
-    glas_info_session_click_completions = goal3completions,
+    glas_info_session_click_completions = goal3completions
   )
 
 
