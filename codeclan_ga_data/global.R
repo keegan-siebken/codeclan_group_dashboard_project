@@ -9,6 +9,7 @@ library(formattable)
 library(tidyverse)
 library(ggthemes)
 library(lubridate)
+library(DT)
 
 # Section 2 - API---------------------------------------------------
 
@@ -156,7 +157,6 @@ clean_goal_path_data <- goal_path_data %>%
     edin_info_session_click_completions = goal5completions,
     glas_info_session_click_completions = goal3completions,
   )
-
 
 
 # Section 3 - colour pallete---------------------------------------------------

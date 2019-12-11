@@ -55,7 +55,8 @@ ui <- dashboardPage(
           box(
             title = "Channel Conversions Graph",
             width = 9,
-            "Channel Graph Content"
+            #testing date picker
+            DT::dataTableOutput("dashboard_date_test")
           ),
           box(
             title = "Channel Conversions Table",
@@ -67,7 +68,8 @@ ui <- dashboardPage(
           box(
             title = "Social Media Conversions Graph",
             width = 9,
-            "Social Media Graph Content"
+            #testing date picker
+            DT::dataTableOutput("goal_date_test")
           ),
           box(
             title = "Social Media Conversions Table",
