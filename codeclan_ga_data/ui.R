@@ -94,11 +94,24 @@ ui <- dashboardPage(
         # first row
         fluidRow(
           tabBox(
-            title = tagList(shiny::icon("walking"), "How users arrive on the CodeClan website"), width = 12, height = "400px",
-            tabPanel("Channel",
-                     plotOutput("users_by_channel_by_day_plot", height = "300px")),
-            tabPanel("Device",
-                    plotOutput("users_by_device_by_day_plot", height = "300px")
+            title = tagList(shiny::icon("walking"), "How users arrive on the CodeClan website"), width = 12, height = "500px",
+            tabPanel("by channel",
+                     plotlyOutput("users_by_channel_by_day_plot", height = "400px"),
+                     plotlyOutput("users_by_channel_by_month_plot", height = "400px"),
+                     # radioButtons("which_time_device_plot",
+                     #              inline = TRUE,
+                     #              tags$i("Select daily or monthly views"),
+                     #              choices = c("daily", "monthly")
+                     # )
+                     ),
+            tabPanel("by device",
+                    plotlyOutput("users_by_device_by_day_plot", height = "400px"),
+                    plotlyOutput("users_by_device_by_month_plot", height = "400px"),
+                    # radioButtons("which_time_device_plot",
+                    #              inline = TRUE,
+                    #              tags$i("Select daily or monthly views"),
+                    #              choices = c("daily", "monthly")
+                    # )
           )
         )
       )

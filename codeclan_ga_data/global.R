@@ -195,7 +195,7 @@ codeclan_palettes <- list(
   `main`  = codeclan_cols("codeclan light blue", "codeclan dark blue", "codeclan gold"),
   `cool`  = codeclan_cols("codeclan dark blue", "codeclan light blue", "codeclan other blue"),
   `hot`   = codeclan_cols("codeclan gold", "codeclan red", "codeclan pink"),
-  `mixed` = codeclan_cols("codeclan gold","codeclan light blue", "codeclan other blue","codeclan dark blue", "codeclan dark grey", "codeclan pink", "codeclan red"),
+  `mixed` = codeclan_cols("codeclan gold","codeclan light blue", "codeclan other blue","codeclan dark blue", "codeclan dark grey", "codeclan light grey", "codeclan pink"),
   `grey`  = codeclan_cols("codeclan light grey", "codeclan dark grey")
 )
 
