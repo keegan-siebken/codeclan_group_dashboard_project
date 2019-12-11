@@ -55,7 +55,7 @@ server <- function(input, output) {
   ################################################################
   
   #---------------------------------------------------------------
-  #user_acquisitions server code - Greg insert code here:
+  #user_acquisitions server code
   
   users_by_device_by_day <- reactive ({
     dashboard_data_filtered() %>%
@@ -72,11 +72,11 @@ server <- function(input, output) {
       x = "\nDate",
       y = "Number of users",
       title = "Number of users by device category by day",
-      subtitle = "by day\n",
       col = "Device"
     ) +
     theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-      scale_color_codeclan(discrete = TRUE, palette = "main")
+    scale_x_date(breaks= "1 month", labels = scales::date_format("%Y-%m-%d")) +
+    scale_color_codeclan(discrete = TRUE, palette = "main")
   )
   })
   
@@ -97,7 +97,6 @@ server <- function(input, output) {
                  x = "\nMonth",
                  y = "Number of users",
                  title = "Number of users by channel grouping by month",
-                 subtitle = "by month\n",
                  fill = "Device"
                ) +
                theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
@@ -123,10 +122,10 @@ server <- function(input, output) {
         x = "\nDate",
         y = "Number of users",
         title = "Number of users by channel grouping by day",
-        subtitle = "by day\n",
         col = "Channel"
       ) +
       theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+      scale_x_date(breaks= "1 month", labels = scales::date_format("%Y-%m-%d")) +
       scale_color_codeclan(discrete = TRUE, palette = "mixed")
     )
   })
@@ -148,7 +147,6 @@ server <- function(input, output) {
                  x = "\nMonth",
                  y = "Number of users",
                  title = "Number of users by channel grouping by month",
-                 subtitle = "by month\n",
                  fill = "Channel"
                ) +
                theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
