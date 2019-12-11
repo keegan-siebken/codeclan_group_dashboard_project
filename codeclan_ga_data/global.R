@@ -27,20 +27,28 @@ ga_auth()
 
 keyring_lock(keyring = "googleanalytics")
 
+# ----------------------------------------
+# only need this section when sorting website initially - not necessary in production use
 #Get a list of accounts you have access to
-account_list <- ga_account_list()
+# account_list <- ga_account_list()
+# 
+# account_list
+# 
+# #ViewID is the way to access the account you want
+# account_list$viewId
+#------------------------------------------
 
-account_list
-
-#ViewID is the way to access the account you want
-account_list$viewId
-
-#Select the one you want to work with
+#Select full CodeClan website data
 my_ga_id <- 102407343
+
+#Set today's date and year previous for flexible API call
+today <- today()
+year_previous <- today() - days(365)
+
 
 #Call the API to access the data required for various dashboards
 dashboard_data <- google_analytics(my_ga_id,
-                 date_range = c("2018-12-01", "2019-12-01"),
+                 date_range = c(year_previous, today),
                  metrics = c(
                    "sessions",
                    "bounces",
@@ -65,7 +73,7 @@ dashboard_data <- google_analytics(my_ga_id,
 # Had to set up a seperate API call for goal path dimensions because API doesn't work if goal path dimensions are called with channel and traffic source dimensions/metrics
 
 goal_path_data <- google_analytics(my_ga_id,
-                                   date_range = c("2018-12-01", "2019-12-01"),
+                                   date_range = c(year_previous, today),
                                    metrics = c(
                                      "goal3Completions",
                                      "goal5Completions"
@@ -149,6 +157,7 @@ clean_goal_path_data <- goal_path_data %>%
     edin_info_session_click_completions = goal5completions,
     glas_info_session_click_completions = goal3completions
   )
+
 
 
 # Section 3 - colour pallete---------------------------------------------------
