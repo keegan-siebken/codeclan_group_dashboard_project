@@ -1,4 +1,3 @@
-view(meta)
 # Section 1 - Loading libraries-------------------------------------
 
 library(googleAnalyticsR)
@@ -10,6 +9,7 @@ library(tidyverse)
 library(ggthemes)
 library(lubridate)
 library(DT)
+
 
 # Section 2 - API---------------------------------------------------
 
@@ -66,7 +66,8 @@ dashboard_data <- google_analytics(my_ga_id,
                    "deviceCategory",
                    "landingPagePath",
                    "secondPagePath",
-                   "exitPagePath"
+                   "exitPagePath",
+                   "socialNetwork"
                  ),
                  max = -1,
                  anti_sample = TRUE
@@ -159,6 +160,62 @@ clean_goal_path_data <- goal_path_data %>%
     edin_info_session_click_completions = goal5completions,
     glas_info_session_click_completions = goal3completions
   )
+
+##################################################################
+#BUILDING GRAPHS AND TABLES FOR goal_channel - MAKE SURE TO REMOVE
+#note: only using dashboard_data for this one
+#start with channel source for successful conversions:
+
+#combine goal completions, group channel and date, summarise
+goal_channel <- clean_dashboard_data %>%
+  mutate(goal_total = glas_info_session_click_completions +
+           edin_info_session_click_completions) %>%
+  group_by(channel_grouping, month) %>%
+  summarise(goal_total_channel = sum(goal_total)) 
+
+#plot
+goal_channel %>%
+  ggplot(aes(x = month, 
+             y = goal_total_channel)) +
+  geom_line(aes(colour = channel_grouping))
+
+#definitely going to have to change summary based on user input
+#also need selectors for channel grouping
+
+#Now to see what social media looks like: 
+
+#first filter top-performing networks - too many small ones:
+goal_social_top <- clean_dashboard_data %>%
+  filter(social_network != "(not set)") %>%
+  mutate(goal_total = glas_info_session_click_completions +
+           edin_info_session_click_completions) %>%
+  group_by(social_network) %>%
+  summarise(goal_total_social = sum(goal_total)) %>% 
+  arrange(desc(goal_total_social)) %>%
+  slice(1:5) 
+
+#now filter by top-performers and group by date
+goal_social <- clean_dashboard_data %>%
+  filter(social_network %in% goal_social_top$social_network) %>%
+  mutate(goal_total = glas_info_session_click_completions +
+           edin_info_session_click_completions) %>%
+  group_by(social_network, date) %>%
+  summarise(goal_total_social = sum(goal_total)) %>%
+  filter(date >= today() - days(7))
+
+#plot
+goal_social %>%
+  ggplot(aes(x = date, 
+             y = goal_total_social)) +
+  geom_line(aes(colour = social_network))
+
+#Again, definitely going to have to change summary based on user input
+#also need selectors for channel grouping
+
+##################################################################
+
+
+
 
 
 # Section 3 - colour pallete---------------------------------------------------
