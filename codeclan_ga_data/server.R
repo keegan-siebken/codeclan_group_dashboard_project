@@ -57,7 +57,8 @@ server <- function(input, output) {
   #---------------------------------------------------------------
   #user_acquisitions server code - Greg insert code here:
   
-  users_by_device_by_day <- clean_dashboard_data %>%
+  users_by_device_by_day <- reactive ({
+    dashboard_data_filtered() %>%
       group_by(month, day, device_category) %>%
       summarise(
         users = sum(users)
@@ -65,9 +66,10 @@ server <- function(input, output) {
       mutate(
         time = make_date(day, month)
       )
-  
+  })
+    
   output$users_by_device_by_day_plot <- renderPlot({
-  ggplot(users_by_device_by_day) +
+  ggplot(users_by_device_by_day()) +
     geom_line(aes(x = time, y = users, col = device_category)) +
     labs(
       x = "\nDay",
@@ -81,7 +83,8 @@ server <- function(input, output) {
     
   })
   
-  users_by_channel_by_day <- clean_dashboard_data %>%
+  users_by_channel_by_day <- reactive ({
+    dashboard_data_filtered() %>%
       group_by(month, day, channel_grouping) %>%
       summarise(
         users = sum(users)
@@ -89,14 +92,15 @@ server <- function(input, output) {
       mutate(
         time = make_date(day, month)
       )
+  })
   
   output$users_by_channel_by_day_plot <- renderPlot({
-    ggplot(users_by_channel_by_day) +
+    ggplot(users_by_channel_by_day()) +
       geom_line(aes(x = time, y = users, col = channel_grouping)) +
       labs(
         x = "\nDay",
         y = "Number of users",
-        title = "Number of users by chanel grouping",
+        title = "Number of users by channel grouping",
         subtitle = "by day\n",
         col = "Channel"
       ) +
