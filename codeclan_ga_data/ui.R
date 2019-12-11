@@ -53,9 +53,10 @@ ui <- dashboardPage(
         # Keegan insert code here
         fluidRow(
           box(
-            title = "Channel Conversions Graph",
+            title = NULL,
             width = 9,
-            plotOutput("channel_conversions_plot", height = "300px")
+            height = "300px",
+            plotOutput("channel_conversions_plot", height = "280px")
           ),
           box(
             title = "Channel Conversions Table",
@@ -66,9 +67,10 @@ ui <- dashboardPage(
         ),
         fluidRow(
           box(
-            title = "Social Media Conversions Graph",
+            title = NULL,
             width = 9,
-            plotOutput("social_conversions_plot", height = "300px")
+            height = "300px",
+            plotOutput("social_conversions_plot", height = "280px")
           ),
           box(
             title = "Social Media Conversions Table",
