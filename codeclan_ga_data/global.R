@@ -1,4 +1,4 @@
-
+view(meta)
 # Section 1 - Loading libraries-------------------------------------
 
 library(googleAnalyticsR)
@@ -50,6 +50,7 @@ year_previous <- today() - days(365)
 dashboard_data <- google_analytics(my_ga_id,
                  date_range = c(year_previous, today),
                  metrics = c(
+                   "users",
                    "sessions",
                    "bounces",
                    "bounceRate",
