@@ -26,14 +26,48 @@ server <- function(input, output) {
   #---------------------------------------------------------------
   #goal_channel server code - Keegan insert code here:
   
-  #testing date picker filtering
-  output$dashboard_date_test <- DT::renderDataTable({
-    dashboard_data_filtered()
+  #channel conversions plot:
+  output$channel_conversions_plot <- renderPlot({
+    dashboard_data_filtered() %>%
+      #combine goal completions, group channel and date, summarise
+      mutate(goal_total = glas_info_session_click_completions +
+               edin_info_session_click_completions) %>%
+      group_by(channel_grouping, date) %>%
+      summarise(goal_total_channel = sum(goal_total)) %>%
+
+      #plot
+      ggplot(aes(x = date, 
+                 y = goal_total_channel)) +
+      geom_line(aes(colour = channel_grouping))
   })
+
+  # social media conversions plot:
+  # first filter top-performing networks - too many small ones:
+  goal_social_top <- reactive({
+    dashboard_data_filtered() %>%
+    filter(social_network != "(not set)") %>%
+    mutate(goal_total = glas_info_session_click_completions +
+             edin_info_session_click_completions) %>%
+    group_by(social_network) %>%
+    summarise(goal_total_social = sum(goal_total)) %>%
+    arrange(desc(goal_total_social)) %>%
+    slice(1:5)
+    })
+
   
-  output$goal_date_test <- DT::renderDataTable({
-    goal_path_data_filtered()
-  })
+  #plot
+  output$social_conversions_plot <- renderPlot({
+    # now filter by top-performers and group by date
+    dashboard_data_filtered() %>%
+      filter(social_network %in% goal_social_top()$social_network) %>%
+      mutate(goal_total = glas_info_session_click_completions +
+               edin_info_session_click_completions) %>%
+      group_by(social_network, date) %>%
+      summarise(goal_total_social = sum(goal_total)) %>%
+      ggplot(aes(x = date,
+                 y = goal_total_social)) +
+      geom_line(aes(colour = social_network))
+  }) 
   
   #---------------------------------------------------------------
   
