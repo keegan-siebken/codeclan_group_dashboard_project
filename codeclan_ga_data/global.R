@@ -11,6 +11,7 @@ library(lubridate)
 library(DT)
 
 
+
 # Section 2 - API---------------------------------------------------
 
 
@@ -167,6 +168,20 @@ clean_goal_path_data <- goal_path_data %>%
 #BUILDING GRAPHS AND TABLES FOR goal_channel - MAKE SURE TO REMOVE
 #note: only using dashboard_data for this one
 #start with channel source for successful conversions:
+
+# channel_month <- clean_dashboard_data %>%
+  #combine goal completions, group channel and month, summarise
+  # mutate(goal_total = glas_info_session_click_completions +
+  #          edin_info_session_click_completions) %>%
+  # mutate(year_month = substr(date, 1, 7)) %>%
+  # group_by(channel_grouping, year_month) %>%
+  # summarise(goal_total_channel = sum(goal_total))
+  
+  #plot
+# channel_month %>%
+#   ggplot(aes(x = year_month, group = channel_grouping)) +
+#   geom_line(aes(y = goal_total_channel,
+#                 colour = channel_grouping))
 
 #combine goal completions, group channel and date, summarise
 # goal_channel <- clean_dashboard_data %>%

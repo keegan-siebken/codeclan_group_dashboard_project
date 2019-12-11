@@ -55,14 +55,22 @@ ui <- dashboardPage(
           tabBox(
             title = "Goal Completions by Channel and Social Network",
             width = 12,
-            height = "600px",
+            height = "500px",
             tabPanel(
               "Channel",
-              plotOutput("channel_conversions_plot", height = "500px")
+              plotOutput("channel_conversions_plot", height = "400px"),
+              radioButtons("downsampling_channel", 
+                           "Summarise by Month or Day", 
+                           c("Month", "Day"), 
+                           selected = NULL)
             ),
             tabPanel(
               "Social Network",
-              plotOutput("social_conversions_plot", height = "500px")
+              plotOutput("social_conversions_plot", height = "400px"),
+              radioButtons("downsampling_social", 
+                           "Summarise by Month or Day", 
+                           c("Month", "Day"), 
+                           selected = NULL)
             )
           )
         )

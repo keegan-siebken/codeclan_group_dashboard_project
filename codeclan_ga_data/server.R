@@ -28,17 +28,34 @@ server <- function(input, output) {
   
   #channel conversions plot:
   output$channel_conversions_plot <- renderPlot({
-    dashboard_data_filtered() %>%
-      #combine goal completions, group channel and date, summarise
-      mutate(goal_total = glas_info_session_click_completions +
-               edin_info_session_click_completions) %>%
-      group_by(channel_grouping, date) %>%
-      summarise(goal_total_channel = sum(goal_total)) %>%
-
-      #plot
-      ggplot(aes(x = date, 
-                 y = goal_total_channel)) +
-      geom_line(aes(colour = channel_grouping))
+    #down-sample based on radio button input:
+    if(input$downsampling_channel == "Month") {
+      dashboard_data_filtered() %>%
+        #combine goal completions, group channel and month, summarise
+        mutate(goal_total = glas_info_session_click_completions +
+                 edin_info_session_click_completions) %>%
+        mutate(year_month = substr(date, 1, 7)) %>%
+        group_by(channel_grouping, year_month) %>%
+        summarise(goal_total_channel = sum(goal_total)) %>%
+        
+        #plot
+        ggplot(aes(x = year_month, 
+                   y = goal_total_channel,
+                   group = channel_grouping)) +
+        geom_line(aes(colour = channel_grouping))
+    } else{
+      dashboard_data_filtered() %>%
+        #combine goal completions, group channel and date, summarise
+        mutate(goal_total = glas_info_session_click_completions +
+                 edin_info_session_click_completions) %>%
+        group_by(channel_grouping, date) %>%
+        summarise(goal_total_channel = sum(goal_total)) %>%
+        
+        #plot
+        ggplot(aes(x = date, 
+                   y = goal_total_channel)) +
+        geom_line(aes(colour = channel_grouping))
+    }
   })
 
   # social media conversions plot:
@@ -58,15 +75,50 @@ server <- function(input, output) {
   #plot
   output$social_conversions_plot <- renderPlot({
     # now filter by top-performers and group by date
-    dashboard_data_filtered() %>%
-      filter(social_network %in% goal_social_top()$social_network) %>%
-      mutate(goal_total = glas_info_session_click_completions +
-               edin_info_session_click_completions) %>%
-      group_by(social_network, date) %>%
-      summarise(goal_total_social = sum(goal_total)) %>%
-      ggplot(aes(x = date,
-                 y = goal_total_social)) +
-      geom_line(aes(colour = social_network))
+    # down_sample based on radio button input
+    if(input$downsampling_social == "Month") {
+      dashboard_data_filtered() %>%
+        #filter to only top-performing social networks
+        filter(social_network %in% goal_social_top()$social_network) %>%
+        #combine goal completions, group social network and month, summarise
+        mutate(goal_total = glas_info_session_click_completions +
+                 edin_info_session_click_completions) %>%
+        mutate(year_month = substr(date, 1, 7)) %>%
+        group_by(social_network, year_month) %>%
+        summarise(goal_total_social = sum(goal_total)) %>%
+        
+        #plot
+        ggplot(aes(x = year_month, 
+                   y = goal_total_social,
+                   group = social_network)) +
+        geom_line(aes(colour = social_network))
+    } else{
+      dashboard_data_filtered() %>%
+        #filter to only top-performing social networks
+        filter(social_network %in% goal_social_top()$social_network) %>%
+        #combine goal completions, group channel and date, summarise
+        mutate(goal_total = glas_info_session_click_completions +
+                 edin_info_session_click_completions) %>%
+        group_by(social_network, date) %>%
+        summarise(goal_total_social = sum(goal_total)) %>%
+        
+        #plot
+        ggplot(aes(x = date, 
+                   y = goal_total_social)) +
+        geom_line(aes(colour = social_network))
+    }
+    
+    
+    
+    # dashboard_data_filtered() %>%
+    #   filter(social_network %in% goal_social_top()$social_network) %>%
+    #   mutate(goal_total = glas_info_session_click_completions +
+    #            edin_info_session_click_completions) %>%
+    #   group_by(social_network, date) %>%
+    #   summarise(goal_total_social = sum(goal_total)) %>%
+    #   ggplot(aes(x = date,
+    #              y = goal_total_social)) +
+    #   geom_line(aes(colour = social_network))
   }) 
   
   #---------------------------------------------------------------
