@@ -23,7 +23,7 @@ ui <- dashboardPage(
       # Adding blank menuItem to give space for dateRangeInput
       HTML("<br/><br/><br/>"),
       # Adding date picker that allows users to select specific date range and the plot automatically updates itself
-      
+
       dateRangeInput(
 
         # InputId to link up date picker code within the server function
@@ -34,13 +34,13 @@ ui <- dashboardPage(
 
         # Start date in the date picker is by default is set to the first date that is found within the date column of clean_dashboard_data
         start = first(clean_dashboard_data$date),
-        
+
         # End date in the date picker by default is set to the last date found within the date column of clean_dashboard_data
         end = last(clean_dashboard_data$date),
-        
+
         #  min and max values are set to prevent users selecting values  in date picker that are outwith the dates available in clean_dashboard_data
         min = first(clean_dashboard_data$date),
-        
+
         max = last(clean_dashboard_data$date)
       )
     )
@@ -52,31 +52,18 @@ ui <- dashboardPage(
         tabName = "goal_channel",
         # Keegan insert code here
         fluidRow(
-          box(
-            title = NULL,
-            width = 9,
-            height = "300px",
-            plotOutput("channel_conversions_plot", height = "280px")
-          ),
-          box(
-            title = "Channel Conversions Table",
-            width = 3,
-            height = "300px",
-            "Channel Conversions Table Content"
-          )
-        ),
-        fluidRow(
-          box(
-            title = NULL,
-            width = 9,
-            height = "300px",
-            plotOutput("social_conversions_plot", height = "280px")
-          ),
-          box(
-            title = "Social Media Conversions Table",
-            width = 3,
-            height = "300px",
-            "Social Media Conversions Table Content"
+          tabBox(
+            title = "Goal Completions by Channel and Social Network",
+            width = 12,
+            height = "600px",
+            tabPanel(
+              "Channel",
+              plotOutput("channel_conversions_plot", height = "500px")
+            ),
+            tabPanel(
+              "Social Network",
+              plotOutput("social_conversions_plot", height = "500px")
+            )
           )
         )
       ),
