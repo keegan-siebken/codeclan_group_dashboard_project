@@ -19,7 +19,7 @@ ui <- dashboardPage(
       menuItem("Goal completions by Channel", tabName = "goal_channel", icon = icon("dashboard")),
       menuItem("Goal completions by Page", tabName = "goal_page", icon = icon("dashboard")),
       menuItem("User Journey", tabName = "user_journey", icon = icon("dashboard")),
-      menuItem("User Aquisitions", tabName = "user_aquisitions", icon = icon("dashboard")),
+      menuItem("User Aquisitions", tabName = "user_aquisitions", icon = icon("users")),
       # Adding blank menuItem to give space for dateRangeInput
       menuItem(""),
       # Adding date picker that allows users to select specific date range and the plot automatically updates itself
@@ -91,8 +91,18 @@ ui <- dashboardPage(
 
       tabItem(
         tabName = "user_aquisitions",
-        # Greg insert code here
+        # first row
+        fluidRow(
+          tabBox(
+            title = tagList(shiny::icon("walking"), "How users arrive on the CodeClan website"), width = 12, height = "400px",
+            tabPanel("Channel",
+                     plotOutput("users_by_channel_by_day_plot", height = "300px")),
+            tabPanel("Device",
+                    plotOutput("users_by_device_by_day_plot", height = "300px")
+          )
+        )
       )
     )
   )
+)
 )

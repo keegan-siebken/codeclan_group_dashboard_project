@@ -57,6 +57,53 @@ server <- function(input, output) {
   #---------------------------------------------------------------
   #user_acquisitions server code - Greg insert code here:
   
+  users_by_device_by_day <- clean_dashboard_data %>%
+      group_by(month, day, device_category) %>%
+      summarise(
+        users = sum(users)
+      ) %>%
+      mutate(
+        time = make_date(day, month)
+      )
+  
+  output$users_by_device_by_day_plot <- renderPlot({
+  ggplot(users_by_device_by_day) +
+    geom_line(aes(x = time, y = users, col = device_category)) +
+    labs(
+      x = "\nDay",
+      y = "Number of users",
+      title = "Number of users by device category",
+      subtitle = "by day\n",
+      col = "Device"
+    ) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+      scale_color_codeclan(discrete = TRUE, palette = "main")
+    
+  })
+  
+  users_by_channel_by_day <- clean_dashboard_data %>%
+      group_by(month, day, channel_grouping) %>%
+      summarise(
+        users = sum(users)
+      ) %>%
+      mutate(
+        time = make_date(day, month)
+      )
+  
+  output$users_by_channel_by_day_plot <- renderPlot({
+    ggplot(users_by_channel_by_day) +
+      geom_line(aes(x = time, y = users, col = channel_grouping)) +
+      labs(
+        x = "\nDay",
+        y = "Number of users",
+        title = "Number of users by chanel grouping",
+        subtitle = "by day\n",
+        col = "Channel"
+      ) +
+      theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+      scale_color_codeclan(discrete = TRUE, palette = "mixed")
+    
+  })
   
   #---------------------------------------------------------------
 }
