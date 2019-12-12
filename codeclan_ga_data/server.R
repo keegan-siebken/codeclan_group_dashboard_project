@@ -45,7 +45,8 @@ server <- function(input, output) {
           x = year_month,
           y = goal_total_channel,
           group = channel_grouping,
-          colour = channel_grouping)) +
+          colour = channel_grouping),
+          alpha = 0.7) +
           labs(
             x = "\nMonth",
             y = "Total Goal Completions",
@@ -69,7 +70,8 @@ server <- function(input, output) {
         day_plot <- ggplot(channel_day,
                       aes(x = date, 
                           y = goal_total_channel)) +
-        geom_point(aes(colour = channel_grouping)) +
+        geom_point(aes(colour = channel_grouping),
+                   alpha = 0.7) +
         labs(
           x = "Date",
           y = "Total Goal Completions",
@@ -117,7 +119,8 @@ server <- function(input, output) {
                                     aes(x = year_month, 
                                         y = goal_total_social,
                                         group = social_network)) +
-        geom_line(aes(colour = social_network)) +
+        geom_line(aes(colour = social_network),
+                  alpha = 0.7) +
         labs(
           x = "Month",
           y = "Total Goal Completions",
@@ -141,7 +144,8 @@ server <- function(input, output) {
         social_day_plot <- ggplot(social_day,
                                   aes(x = date, 
                                       y = goal_total_social)) +
-        geom_point(aes(colour = social_network)) +
+        geom_point(aes(colour = social_network),
+                   alpha = 0.7) +
         labs(
           x = "Date",
           y = "Total Goal Completions",
