@@ -9,6 +9,7 @@ library(tidyverse)
 library(ggthemes)
 library(lubridate)
 library(DT)
+library(plotly)
 
 
 

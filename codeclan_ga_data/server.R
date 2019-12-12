@@ -30,19 +30,25 @@ server <- function(input, output) {
   output$channel_conversions_plot <- renderPlot({
     #down-sample based on radio button input:
     if(input$downsampling_channel == "Month") {
-      dashboard_data_filtered() %>%
-        #combine goal completions, group channel and month, summarise
+      #combine goal completions, group channel and month, summarise
+      channel_full_month <- dashboard_data_filtered() %>%
         mutate(goal_total = glas_info_session_click_completions +
                  edin_info_session_click_completions) %>%
         mutate(year_month = substr(date, 1, 7)) %>%
         group_by(channel_grouping, year_month) %>%
-        summarise(goal_total_channel = sum(goal_total)) %>%
+        summarise(goal_total_channel = sum(goal_total))
         
         #plot
-        ggplot(aes(x = year_month, 
+        ggplotly(ggplot(channel_full_month, aes(x = year_month, 
                    y = goal_total_channel,
                    group = channel_grouping)) +
-        geom_line(aes(colour = channel_grouping))
+        geom_line(aes(colour = channel_grouping)) +
+          labs(
+            x = "Month",
+            y = "Total Goal Completions",
+            title = "Total Goal Completions by Channel",
+            colour = "Channel"
+          ))
     } else{
       dashboard_data_filtered() %>%
         #combine goal completions, group channel and date, summarise
@@ -54,7 +60,13 @@ server <- function(input, output) {
         #plot
         ggplot(aes(x = date, 
                    y = goal_total_channel)) +
-        geom_line(aes(colour = channel_grouping))
+        geom_line(aes(colour = channel_grouping)) +
+        labs(
+          x = "Date",
+          y = "Total Goal Completions",
+          title = "Total Goal Completions by Channel",
+          colour = "Channel"
+        )
     }
   })
 
@@ -68,7 +80,7 @@ server <- function(input, output) {
     group_by(social_network) %>%
     summarise(goal_total_social = sum(goal_total)) %>%
     arrange(desc(goal_total_social)) %>%
-    slice(1:5)
+    slice(1:7)
     })
 
   
@@ -91,7 +103,13 @@ server <- function(input, output) {
         ggplot(aes(x = year_month, 
                    y = goal_total_social,
                    group = social_network)) +
-        geom_line(aes(colour = social_network))
+        geom_line(aes(colour = social_network)) +
+        labs(
+          x = "Month",
+          y = "Total Goal Completions",
+          title = "Total Goal Completions by Social Network",
+          colour = "Social Network"
+        )
     } else{
       dashboard_data_filtered() %>%
         #filter to only top-performing social networks
@@ -105,7 +123,13 @@ server <- function(input, output) {
         #plot
         ggplot(aes(x = date, 
                    y = goal_total_social)) +
-        geom_line(aes(colour = social_network))
+        geom_line(aes(colour = social_network)) +
+        labs(
+          x = "Date",
+          y = "Total Goal Completions",
+          title = "Total Goal Completions by Social Network",
+          colour = "Social Network"
+        )
     }
     
     
