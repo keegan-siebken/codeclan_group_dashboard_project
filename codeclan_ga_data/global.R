@@ -316,7 +316,10 @@ behaviour_flow <- clean_dashboard_data %>%
     ) %>%
   filter(
     str_detect(landing_page_path, "/blog/", negate = TRUE),
-    sessions >= 10) %>%
+    sessions >= 10,
+    landing_page_path != "/pre-course-work/",
+    landing_page_path != "/admissions-track/",
+    second_page_path != "/admissions-track/") %>%
   rename(
     entry_page = landing_page_path,
     "goal clicks (ed)" = edin_info_session_click_completions,

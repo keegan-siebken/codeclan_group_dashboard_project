@@ -100,7 +100,7 @@ ui <- dashboardPage(
               inputId = "channel",
               label = "Select Channel",
               choices = unique(entry_page_user_flow$channel),
-              selected = "organic search",
+              selected = "direct",
               multiple = FALSE
             )
           ),
