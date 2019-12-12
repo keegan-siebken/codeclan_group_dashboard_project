@@ -93,6 +93,9 @@ ui <- dashboardPage(
         tabName = "user_aquisitions",
         # first row
         fluidRow(
+          infoBoxOutput("total_number_users_Box"),
+          infoBoxOutput("total_number_sessions_Box"),
+          infoBoxOutput("mean_bounce_rate_Box"),
           tabBox(
             title = tagList(shiny::icon("walking"), "How users arrive on the CodeClan website"), width = 12, height = "850px",
             tabPanel("by channel",

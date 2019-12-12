@@ -57,6 +57,48 @@ server <- function(input, output) {
   #---------------------------------------------------------------
   #user_acquisitions server code
   
+  total_users <- reactive ({
+    dashboard_data_filtered() %>%
+      summarise(
+        users = sum(users)
+      ) 
+  })
+  
+  output$total_number_users_Box <- renderInfoBox({
+    infoBox(
+      "Total number of users: ", prettyNum(total_users(), big.mark = ","), tags$em(" (over date range selected)"), icon = icon("users"),
+      color = "navy"
+    )
+  })
+  
+  total_sessions <- reactive ({
+    dashboard_data_filtered() %>%
+      summarise(
+        sessions = sum(sessions)
+      ) 
+  })
+  
+  output$total_number_sessions_Box <- renderInfoBox({
+    infoBox(
+      "Total number of sessions: ", prettyNum(total_sessions(), big.mark = ","), tags$em(" (over date range selected)"), icon = icon("user-friends"),
+      color = "blue"
+    )
+  })
+  
+  mean_bounce_rate <- reactive ({
+    dashboard_data_filtered() %>%
+      summarise(
+        bounce = mean(bounce_rate_percentage)
+      ) 
+  })
+  
+  output$mean_bounce_rate_Box <- renderInfoBox({
+    infoBox(
+      "Mean bounce rate: ", round(mean_bounce_rate()), tags$em("% (over date range selected)"), icon = icon("door-open"),
+      color = "light-blue"
+    )
+  })
+  
   users_by_device_by_day <- reactive ({
     dashboard_data_filtered() %>%
       group_by(date, device_category) %>%
