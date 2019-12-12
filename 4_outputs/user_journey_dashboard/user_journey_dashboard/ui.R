@@ -127,15 +127,6 @@ ui <- dashboardPage(
           
         ),
 
-        # fluidRow(
-        #   column(
-        #     6,
-        #     shinydashboard::box(
-        #       title = "Non-Bounced Exits",
-        #       width = 6
-        #     ),
-        #   )
-        # ),
        
        fluidRow(
            shinydashboard::box(DT::dataTableOutput("user_flow"),

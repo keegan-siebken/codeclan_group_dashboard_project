@@ -9,14 +9,12 @@ library(formattable)
 library(tidyverse)
 library(ggthemes)
 library(lubridate)
+library(DT)
+library(plotly)
 
 # Section 2 - API---------------------------------------------------
 
 
-keyring_unlock(keyring = "googleanalytics")
-# Setting options(googleAuthR.client_id) and options(googleAuthR.client_secret) to activate API call
-options(googleAuthR.client_id = keyring::key_get(service = "ga_client_id", keyring = "googleanalytics"))
-options(googleAuthR.client_secret = keyring::key_get(service = "ga_client_secret", keyring = "googleanalytics"))
 
 # reloading package
 devtools::reload(pkg = devtools::inst("googleAnalyticsR"))
@@ -67,7 +65,8 @@ dashboard_data <- google_analytics(my_ga_id,
                    "deviceCategory",
                    "landingPagePath",
                    "secondPagePath",
-                   "exitPagePath"
+                   "exitPagePath",
+                   "socialNetwork"
                  ),
                  max = -1,
                  anti_sample = TRUE
@@ -161,8 +160,6 @@ clean_goal_path_data <- goal_path_data %>%
     glas_info_session_click_completions = goal3completions
   )
 
-
-
 # Section 3 - colour pallete---------------------------------------------------
 # codeclan corporate colour pallete
 codeclan_colours <- c(
@@ -201,7 +198,7 @@ codeclan_palettes <- list(
   `main`  = codeclan_cols("codeclan light blue", "codeclan dark blue", "codeclan gold"),
   `cool`  = codeclan_cols("codeclan dark blue", "codeclan light blue", "codeclan other blue"),
   `hot`   = codeclan_cols("codeclan gold", "codeclan red", "codeclan pink"),
-  `mixed` = codeclan_cols("codeclan gold","codeclan light blue", "codeclan other blue","codeclan dark blue", "codeclan dark grey"),
+  `mixed` = codeclan_cols("codeclan gold","codeclan light blue", "codeclan other blue","codeclan dark blue", "codeclan dark grey", "codeclan light grey", "codeclan pink"),
   `grey`  = codeclan_cols("codeclan light grey", "codeclan dark grey")
 )
 
