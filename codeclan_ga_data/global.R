@@ -1,3 +1,4 @@
+
 # Section 1 - Loading libraries-------------------------------------
 
 library(googleAnalyticsR)
@@ -51,7 +52,9 @@ dashboard_data <- google_analytics(my_ga_id,
                    "sessions",
                    "bounces",
                    "bounceRate",
+                   "exits",
                    "exitRate",
+                   "pageviews",
                    "avgTimeOnPage",
                    "goal3Completions",
                    "goal5Completions"),
@@ -62,7 +65,8 @@ dashboard_data <- google_analytics(my_ga_id,
                    "deviceCategory",
                    "landingPagePath",
                    "secondPagePath",
-                   "exitPagePath"
+                   "exitPagePath",
+                   "socialNetwork"
                  ),
                  max = -1,
                  anti_sample = TRUE
@@ -120,8 +124,8 @@ clean_dashboard_data <- dashboard_data %>%
   mutate(
     channel_grouping = str_to_lower(channel_grouping),
     source           = str_to_lower(source),
-    bounce_rate      = round(bounce_rate, 2),
-    exit_rate        = round(exit_rate, 2)
+    bounce_rate      = round(bounce_rate, 0),
+    exit_rate        = round(exit_rate, 0)
     ) %>%
   # renaming columns to help user better understand the data
   rename (
@@ -155,7 +159,6 @@ clean_goal_path_data <- goal_path_data %>%
     edin_info_session_click_completions = goal5completions,
     glas_info_session_click_completions = goal3completions
   )
-
 
 # Section 3 - colour pallete---------------------------------------------------
 # codeclan corporate colour pallete
@@ -195,7 +198,7 @@ codeclan_palettes <- list(
   `main`  = codeclan_cols("codeclan light blue", "codeclan dark blue", "codeclan gold"),
   `cool`  = codeclan_cols("codeclan dark blue", "codeclan light blue", "codeclan other blue"),
   `hot`   = codeclan_cols("codeclan gold", "codeclan red", "codeclan pink"),
-  `mixed` = codeclan_cols("codeclan gold","codeclan light blue", "codeclan other blue","codeclan dark blue", "codeclan dark grey", "codeclan pink", "codeclan red"),
+  `mixed` = codeclan_cols("codeclan gold","codeclan light blue", "codeclan other blue","codeclan dark blue", "codeclan dark grey", "codeclan light grey", "codeclan pink"),
   `grey`  = codeclan_cols("codeclan light grey", "codeclan dark grey")
 )
 
@@ -278,6 +281,7 @@ scale_fill_codeclan <- function(palette = "main", discrete = TRUE, reverse = FAL
 #   geom_bar() +
 #   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
 #   scale_fill_codeclan(palette = "mixed", guide = "none")
+
 
 
 
@@ -395,4 +399,135 @@ goalcc_comparison <- goalcc_previous_clean2 %>%
 
 
 
+
+
+# data cleaning for user journey dashboard --------------------------------
+
+# data cleaning for behaviour flow
+
+behaviour_flow <- clean_dashboard_data %>%
+  select(
+    date,
+    channel_grouping,
+    device_category,
+    sessions,
+    landing_page_path,
+    bounces,
+    second_page_path,
+    exits,
+    edin_info_session_click_completions,
+    glas_info_session_click_completions
+  ) %>%
+  group_by(
+    "channel" = channel_grouping,
+    "device" = device_category,
+    landing_page_path,
+    second_page_path
+    ) %>%
+  summarise(
+    sessions = sum(sessions),
+    bounces = sum(bounces),
+    exits = sum(exits),
+    edin_info_session_click_completions = sum(edin_info_session_click_completions),
+    glas_info_session_click_completions = sum(glas_info_session_click_completions)
+    ) %>%
+  filter(
+    str_detect(landing_page_path, "/blog/", negate = TRUE),
+    sessions >= 10,
+    landing_page_path != "/pre-course-work/",
+    landing_page_path != "/admissions-track/",
+    second_page_path != "/admissions-track/") %>%
+  rename(
+    entry_page = landing_page_path,
+    "goal clicks (ed)" = edin_info_session_click_completions,
+    "goal clicks (gla)" = glas_info_session_click_completions
+  ) %>%
+  arrange(desc(sessions))
+
+# data cleaning for entry page engagement table
+entry_page_user_flow <- clean_dashboard_data %>%
+  select(
+    date,
+    channel_grouping,
+    device_category,
+    sessions,
+    landing_page_path,
+    bounces
+  ) %>%
+  group_by(
+    "channel" = channel_grouping,
+    "device" = device_category,
+    landing_page_path
+  ) %>%
+  summarise(
+    sessions = sum(sessions),
+    bounces = sum(bounces),
+  ) %>%
+  mutate(
+    "bounce rate" = round((bounces/sessions) * 100, 0)
+  ) %>%
+  select(
+    channel,
+    device,
+    landing_page_path,
+    sessions,
+    bounces,
+    "bounce rate"
+  ) %>%
+  filter(
+    landing_page_path != "/pre-course-work/",
+    landing_page_path != "/admissions-track/",
+    str_detect(landing_page_path, "/blog/", negate = TRUE),
+    sessions >= 10,
+    bounces >= 1
+  ) %>%
+  arrange(desc(bounces), desc(sessions))
+
+
+# data cleaning for next page engagement table
+
+next_page_user_flow <- clean_dashboard_data %>%
+  select(
+    date,
+    channel_grouping,
+    device_category,
+    sessions,
+    second_page_path,
+    exits,
+    pageviews,
+    edin_info_session_click_completions,
+    glas_info_session_click_completions
+  ) %>%
+  group_by(
+    "channel" = channel_grouping,
+    "device" = device_category,
+     second_page_path
+    ) %>%
+  summarise(
+    sessions = sum(sessions),
+    exits = sum(exits),
+    pageviews = sum(pageviews),
+    "info session click (ed)" = sum(edin_info_session_click_completions),
+    "info session click (gla)" = sum(glas_info_session_click_completions)
+  ) %>%
+  mutate(
+    "exit rate" = round((exits / pageviews) * 100, 0)
+  ) %>%
+  select(
+    channel,
+    device,
+    second_page_path,
+    sessions,
+    exits,
+    "exit rate",
+  ) %>%
+  filter(
+    second_page_path != "(not set)",
+    second_page_path != "/admissions-track/",
+    str_detect(second_page_path, "/blog/", negate = TRUE),
+    sessions >= 10,
+    exits >= 1
+  ) %>%
+  arrange(desc(sessions), desc(exits))
+  
 
