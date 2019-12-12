@@ -58,7 +58,7 @@ ui <- dashboardPage(
             height = "500px",
             tabPanel(
               "Channel",
-              plotOutput("channel_conversions_plot", height = "400px"),
+              plotlyOutput("channel_conversions_plot", height = "400px"),
               radioButtons("downsampling_channel", 
                            "Summarise by Month or Day", 
                            c("Month", "Day"), 
@@ -66,7 +66,7 @@ ui <- dashboardPage(
             ),
             tabPanel(
               "Social Network",
-              plotOutput("social_conversions_plot", height = "400px"),
+              plotlyOutput("social_conversions_plot", height = "400px"),
               radioButtons("downsampling_social", 
                            "Summarise by Month or Day", 
                            c("Month", "Day"), 
