@@ -16,10 +16,10 @@ ui <- dashboardPage(
 
   dashboardSidebar(
     sidebarMenu(
-      menuItem("Goal completions by Channel", tabName = "goal_channel", icon = icon("dashboard")),
-      menuItem("Goal completions by Page", tabName = "goal_page", icon = icon("dashboard")),
-      menuItem("User Journey", tabName = "user_journey", icon = icon("dashboard")),
-      menuItem("User Aquisitions", tabName = "user_aquisitions", icon = icon("dashboard")),
+      menuItem("Goal completions by Channel", tabName = "goal_channel", icon = icon("futbol")),
+      menuItem("Goal completions by Page", tabName = "goal_page", icon = icon("futbol")),
+      menuItem("User Journey", tabName = "user_journey", icon = icon("walking")),
+      menuItem("User Aquisitions", tabName = "user_aquisitions", icon = icon("users")),
       # Adding blank menuItem to give space for dateRangeInput
       HTML("<br/><br/><br/>"),
       # Adding date picker that allows users to select specific date range and the plot automatically updates itself
@@ -88,8 +88,36 @@ ui <- dashboardPage(
 
       tabItem(
         tabName = "user_aquisitions",
-        # Greg insert code here
+        # first row
+        fluidRow(
+          infoBoxOutput("total_number_users_Box"),
+          infoBoxOutput("total_number_sessions_Box"),
+          infoBoxOutput("mean_bounce_rate_Box"),
+          tabBox(
+            title = tagList(shiny::icon("walking"), "How users arrive on the CodeClan website"), width = 12, height = "850px",
+            tabPanel("by channel",
+                     plotlyOutput("users_by_channel_by_day_plot", height = "370px"),
+                     tags$br(),
+                     plotlyOutput("users_by_channel_by_month_plot", height = "370px"),
+                     # radioButtons("which_time_channel_plot",
+                     #              inline = TRUE,
+                     #              tags$i("Select daily or monthly views"),
+                     #              choices = c("daily", "monthly")
+                     # )
+                     ),
+            tabPanel("by device",
+                    plotlyOutput("users_by_device_by_day_plot", height = "370px"),
+                    tags$br(),
+                    plotlyOutput("users_by_device_by_month_plot", height = "370px"),
+                    # radioButtons("which_time_device_plot",
+                    #              inline = TRUE,
+                    #              tags$i("Select daily or monthly views"),
+                    #              choices = c("daily", "monthly")
+                    # )
+          )
+        )
       )
     )
   )
+)
 )
