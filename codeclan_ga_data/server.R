@@ -47,12 +47,13 @@ server <- function(input, output) {
           group = channel_grouping,
           colour = channel_grouping)) +
           labs(
-            x = "Month",
+            x = "\nMonth",
             y = "Total Goal Completions",
             title = "Total Goal Completions by Channel",
             colour = "Channel"
           ) +
-          scale_color_codeclan()
+          theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+          scale_color_codeclan(discrete = TRUE, palette = "main")
         ggplotly(month_plot)
         
         
@@ -75,7 +76,8 @@ server <- function(input, output) {
           title = "Total Goal Completions by Channel",
           colour = "Channel"
         ) +
-        scale_color_codeclan()
+        theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+        scale_color_codeclan(discrete = TRUE, palette = "main")
         ggplotly(day_plot)
     }
   })
@@ -122,7 +124,8 @@ server <- function(input, output) {
           title = "Total Goal Completions by Social Network",
           colour = "Social Network"
         ) +
-        scale_color_codeclan()
+        theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+        scale_color_codeclan(discrete = TRUE, palette = "main")
         ggplotly(social_month_plot)
     } else{
       social_day <- dashboard_data_filtered() %>%
@@ -145,7 +148,8 @@ server <- function(input, output) {
           title = "Total Goal Completions by Social Network",
           colour = "Social Network"
         ) +
-        scale_color_codeclan()
+        theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+        scale_color_codeclan(discrete = TRUE, palette = "main")
         ggplotly(social_day_plot)
     }
     
