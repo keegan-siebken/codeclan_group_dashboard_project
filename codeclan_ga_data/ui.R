@@ -84,18 +84,18 @@ ui <- dashboardPage(
         # Amber insert code here
         fluidRow(
           tabBox(
-            title = tagList(shiny::icon("clipboard-check"), "Where Users Click on Events on the CodeClan website"), 
+            title = tagList(shiny::icon("clipboard-check"), "Where Users Click on Events on the CodeClan Website"), 
             width = 12, height = "400px",
             tabPanel("Glasgow",
-                     plotOutput("goal3cc_test1_plot", height = "300px")),
+                     plotOutput("goal3cc_test1_plot", height = "300px"),
                      plotOutput("goal3cc_comparison_plot", height = "300px")),
             tabPanel("Edinburgh",
                      plotOutput("goal5cc_test1_plot", height = "300px"),
-                     plotOutput("goal5cc_comparison_plot", height = "300px"))
+                     plotOutput("goal5cc_comparison_plot", height = "300px")))
             )
-          )
-        )
-      ),
+          ),
+        
+      
 
       tabItem(
         tabName = "user_journey",

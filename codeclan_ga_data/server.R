@@ -49,6 +49,12 @@ server <- function(input, output) {
     summarise(count = sum(glas_info_session_click_completions)) %>%
     ggplot(aes(x = category, y = count, fill = category)) +
     geom_col() +
+      labs(
+        x = "Page Category",
+        y = "Glasgow Click Completions",
+        title = "Glasgow Event Clicks by Page Category",
+        fill = "Category"
+      ) +
     scale_fill_codeclan()
 })
   
@@ -59,6 +65,12 @@ server <- function(input, output) {
       summarise(count = sum(edin_info_session_click_completions)) %>%
       ggplot(aes(x = category, y = count, fill = category)) +
       geom_col() +
+      labs(
+        x = "Page Category",
+        y = "Edinburgh Click Completions",
+        title = "Edinburgh Event Clicks by Page Category",
+        fill = "Category"
+      ) +
       scale_fill_codeclan()
     
 })
@@ -74,6 +86,12 @@ server <- function(input, output) {
     ggplot(aes(x = previous_step_category, y = count3,
                fill = previous_step_category)) +
     geom_col() +
+      labs(
+        x = "Previous Step Page Category",
+        y = "Glasgow Click Completions",
+        title = "Previous Page Category before Glasgow Event Clicks",
+        fill = "Previous Step Category"
+      ) +
     scale_fill_codeclan()
     
 })
@@ -89,6 +107,12 @@ server <- function(input, output) {
       ggplot(aes(x = previous_step_category, y = count5,
                  fill = previous_step_category)) +
       geom_col() +
+      labs(
+        x = "Previous Step Page Category",
+        y = "Edinburgh Click Completions",
+        title = "Previous Page Category before Edinburgh Event Clicks",
+        fill = "Previous Step Category"
+      ) +
       scale_fill_codeclan()
     
     
