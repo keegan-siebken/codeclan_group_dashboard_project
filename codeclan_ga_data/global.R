@@ -1,4 +1,4 @@
-view(meta)
+
 # Section 1 - Loading libraries-------------------------------------
 
 library(googleAnalyticsR)
@@ -54,7 +54,9 @@ dashboard_data <- google_analytics(my_ga_id,
                    "sessions",
                    "bounces",
                    "bounceRate",
+                   "exits",
                    "exitRate",
+                   "pageviews",
                    "avgTimeOnPage",
                    "goal3Completions",
                    "goal5Completions"),
@@ -123,8 +125,8 @@ clean_dashboard_data <- dashboard_data %>%
   mutate(
     channel_grouping = str_to_lower(channel_grouping),
     source           = str_to_lower(source),
-    bounce_rate      = round(bounce_rate, 2),
-    exit_rate        = round(exit_rate, 2)
+    bounce_rate      = round(bounce_rate, 0),
+    exit_rate        = round(exit_rate, 0)
     ) %>%
   # renaming columns to help user better understand the data
   rename (
