@@ -94,7 +94,7 @@ server <- function(input, output) {
   
   output$mean_bounce_rate_Box <- renderInfoBox({
     infoBox(
-      "Mean bounce rate: ", round(mean_bounce_rate()), tags$em("% (over date range selected)"), icon = icon("door-open"),
+      "Mean bounce rate: ", paste0(round(mean_bounce_rate()), "%"), tags$em("(over date range selected)"), icon = icon("door-open"),
       color = "light-blue"
     )
   })
