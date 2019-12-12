@@ -1,5 +1,6 @@
 library(shiny)
 library(shinydashboard)
+library(DT)
 
 
 ui <- dashboardPage(
@@ -82,9 +83,77 @@ ui <- dashboardPage(
         # Amber insert code here
       ),
 
+# User Journey Dashboard UI Script ----------------------------------------
+      
+      
       tabItem(
         tabName = "user_journey",
-        # Stewart insert code here
+        
+        
+        tags$h1(tags$b(titlePanel("First and Second Page Interaction for the last 12 Months"))),
+        tags$br(),
+        
+        fluidRow(
+          column(
+            3,
+            # Selector button that allows user to select which channel to view the data by
+            selectInput(
+              inputId = "channel",
+              label = "Select Channel",
+              choices = unique(entry_page_user_flow$channel),
+              selected = "organic search",
+              multiple = FALSE
+            )
+          ),
+          
+          column(
+            3,
+            
+            # Selector button that allows user to select what device to view the data by
+            selectInput(
+              inputId = "device",
+              label = "Select Device",
+              choices = unique(next_page_user_flow$device),
+              selected = "desktop",
+              multiple = FALSE
+            )
+          ),
+          
+          # Checkbox that allows user to include or exclude (not set) values under second_page_path
+          column(
+            3,
+            checkboxInput(
+              inputId = "not_set",
+              label = "Exclude (not set)",
+              value = FALSE
+            )
+          )
+          
+        ),
+        
+        # Behaviour flow datatable visualisation
+        fluidRow(
+          shinydashboard::box(DT::dataTableOutput("user_flow"),
+                              title = "Behaviour Flow",
+                              width = 12
+          )
+        ),
+        
+        # Entry page engagement datatable visualisation
+        fluidRow(
+          shinydashboard::box(DT::dataTableOutput("entry_page"),
+                              title = "Entry Page Engagement",
+                              width = 12
+          )
+        ),
+        
+        # Next page datatable visualisation
+        fluidRow(
+          shinydashboard::box(DT::dataTableOutput("next_page"),
+                              title = "Next Page Engagement",
+                              width = 12
+          )
+        )
       ),
 
       tabItem(

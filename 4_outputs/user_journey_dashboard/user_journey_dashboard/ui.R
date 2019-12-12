@@ -88,7 +88,10 @@ ui <- dashboardPage(
 
       tabItem(
         tabName = "user_journey",
-
+       
+       tags$h1(tags$b(titlePanel("First and Second Page Interaction for the last 12 Months"))),
+        tags$br(),
+       
         fluidRow(
           column(
             3,
@@ -96,7 +99,7 @@ ui <- dashboardPage(
             selectInput(
               inputId = "channel",
               label = "Select Channel",
-              choices = unique(clean_dashboard_data$channel_grouping),
+              choices = unique(entry_page_user_flow$channel),
               selected = "organic search",
               multiple = FALSE
             )
@@ -107,28 +110,52 @@ ui <- dashboardPage(
             selectInput(
               inputId = "device",
               label = "Select Device",
-              choices = unique(clean_dashboard_data$device_category),
+              choices = unique(next_page_user_flow$device),
               selected = "desktop",
               multiple = FALSE
             )
-          )
-        ),
-
-        fluidRow(
+          ),
+          
           column(
-            6,
-            shinydashboard::box(
-              title = "Non-Bounced Exits",
-              width = 6
-            ),
-          )
+              3,
+              checkboxInput(
+                  inputId = "not_set",
+                  label = "Exclude (not set)",
+                  value = FALSE
+                  )
+              )
+          
         ),
 
+        # fluidRow(
+        #   column(
+        #     6,
+        #     shinydashboard::box(
+        #       title = "Non-Bounced Exits",
+        #       width = 6
+        #     ),
+        #   )
+        # ),
+       
+       fluidRow(
+           shinydashboard::box(DT::dataTableOutput("user_flow"),
+                               title = "Behaviour Flow",
+                               width = 12
+           )
+       ),
+
         fluidRow(
-          shinydashboard::box(DT::dataTableOutput("user_flow"),
-            title = "User Flow",
+          shinydashboard::box(DT::dataTableOutput("entry_page"),
+            title = "Entry Page Engagement",
             width = 12
           )
+        ),
+        
+        fluidRow(
+            shinydashboard::box(DT::dataTableOutput("next_page"),
+                                title = "Next Page Engagement",
+                                width = 12
+            )
         )
       ),
 
