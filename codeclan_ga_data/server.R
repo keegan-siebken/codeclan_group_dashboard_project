@@ -41,7 +41,59 @@ server <- function(input, output) {
   
   #---------------------------------------------------------------
   #goal_page server code - Amber insert code here:
+  output$goal3cc_test1_plot <- renderPlot({
+    goal3cc_test1 %>%
+    select(month, year, glas_info_session_click_completions, 
+           category) %>%
+    group_by(category) %>%
+    summarise(count = sum(glas_info_session_click_completions)) %>%
+    ggplot(aes(x = category, y = count, fill = category)) +
+    geom_col() +
+    scale_fill_codeclan()
+})
   
+  output$goal5cc_test1_plot <- renderPlot({
+    goal5cc_test1 %>%
+      select(month, year, edin_info_session_click_completions, category) %>%
+      group_by(category) %>%
+      summarise(count = sum(edin_info_session_click_completions)) %>%
+      ggplot(aes(x = category, y = count, fill = category)) +
+      geom_col() +
+      scale_fill_codeclan()
+    
+})
+  
+  output$goal3cc_comparison_plot <- renderPlot({
+    goalcc_comparison %>%
+    select(month, year, glas_info_session_click_completions, 
+           edin_info_session_click_completions, 
+           category, previous_step_category) %>%
+    group_by(previous_step_category) %>%
+    summarise(count5 = sum(edin_info_session_click_completions), 
+              count3 = sum(glas_info_session_click_completions)) %>%
+    ggplot(aes(x = previous_step_category, y = count3,
+               fill = previous_step_category)) +
+    geom_col() +
+    scale_fill_codeclan()
+    
+})
+  
+  output$goal5cc_comparison_plot <- renderPlot({
+    goalcc_comparison %>%
+      select(month, year, glas_info_session_click_completions, 
+             edin_info_session_click_completions,                     
+             category, previous_step_category) %>%
+      group_by(previous_step_category) %>%
+      summarise(count5 = sum(edin_info_session_click_completions), 
+                count3 = sum(glas_info_session_click_completions)) %>%
+      ggplot(aes(x = previous_step_category, y = count5,
+                 fill = previous_step_category)) +
+      geom_col() +
+      scale_fill_codeclan()
+    
+    
+    
+  })
   #---------------------------------------------------------------
   
   ################################################################

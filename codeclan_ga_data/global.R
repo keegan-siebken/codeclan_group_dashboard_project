@@ -278,3 +278,121 @@ scale_fill_codeclan <- function(palette = "main", discrete = TRUE, reverse = FAL
 #   geom_bar() +
 #   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
 #   scale_fill_codeclan(palette = "mixed", guide = "none")
+
+
+
+# Section Goal Completion by Page---------------------------------------------------
+## Wrangling
+
+
+
+# Selecting variables for Goal 3 (glas_info_session_click_completions)
+# completions by page
+goal3cc <- clean_goal_path_data  %>%
+  select(date, year, month, day, glas_info_session_click_completions, 
+         goal_completion_location) %>%
+  filter(glas_info_session_click_completions >= 1)
+
+# shortening the name of the websites and categorising them
+goal3cc_test1 <- goal3cc %>%
+  mutate(category = case_when(
+    str_detect(goal_completion_location, "/events/")   ~ "events",
+    str_detect(goal_completion_location, "(entrance)") ~ "entrance",
+    str_detect(goal_completion_location, "/blog/")     ~ "blog", 
+    str_detect(goal_completion_location, "/enquire/")  ~ "enqiry",
+    str_detect(goal_completion_location, "/courses/")  ~ "courses",
+    str_detect(goal_completion_location,
+               "/data-analysis-announcement/")  ~ "data",
+    TRUE  ~ "other"
+  ))
+
+# Selecting variables for Goal 5 (edin_info_session_click_completions)
+# completions by page
+
+goal5cc <- clean_goal_path_data  %>%
+  select(date, year, month, day, edin_info_session_click_completions, 
+         goal_completion_location) %>%
+  filter(edin_info_session_click_completions >= 1)
+
+
+# shortening the name of the websites and categorising them
+goal5cc_test1 <- goal5cc %>%
+  mutate(category = case_when(
+    str_detect(goal_completion_location, "/events/")   ~ "events",
+    str_detect(goal_completion_location, "(entrance)") ~ "entrance",
+    str_detect(goal_completion_location, "/blog/")     ~ "blog", 
+    str_detect(goal_completion_location, "/enquire/")  ~ "enqiry",
+    str_detect(goal_completion_location, "/courses/")  ~ "courses",
+    str_detect(goal_completion_location,
+               "/data-analysis-announcement/")  ~ "data",
+    TRUE  ~ "other"
+  ))
+
+
+
+# Selecting variables for Goal Completions after Previous Step
+
+goalcc_previous <- clean_goal_path_data  %>%
+  select(date, year, month, day, glas_info_session_click_completions, 
+         edin_info_session_click_completions, 
+         goal_completion_location, goal_previous_step1)
+
+
+# Shortening the names of the websites and categorising them
+# for the Previous Step 1
+
+goalcc_previous_clean <-goalcc_previous %>%
+  mutate(previous_step_category = case_when(
+    str_detect(goal_previous_step1, "/events/") ~ "events",
+    str_detect(goal_previous_step1, "(entrance)") ~ "entrance",
+    str_detect(goal_previous_step1, "/blog/") ~ "blog",
+    str_detect(goal_previous_step1, "/enquire/") ~ "enqiry",
+    str_detect(goal_previous_step1, "/courses/") ~ "courses",
+    str_detect(goal_previous_step1, "/about-us/") ~ "about_us",
+    str_detect(goal_previous_step1, "/codeclan-store/") ~
+      "codeclan_store",
+    str_detect(goal_previous_step1, "/for-employers/") ~
+      "for_employers",
+    str_detect(goal_previous_step1, "/highlands-academy/") ~
+      "highlands_academy",
+    str_detect(goal_previous_step1, "/pre-course-work") ~
+      "pre_course_work",
+    str_detect(goal_previous_step1, "/ourbrand/") ~ "our_brand",
+    str_detect(goal_previous_step1, "/the-codeclan-experience") ~
+      "codeclan_experience",
+    str_detect(goal_previous_step1, "/our-board/") ~ "our_board",
+    str_detect(goal_previous_step1, "/admissions-track") ~
+      "admissions",
+    str_detect(goal_previous_step1, "/tech-boom/") ~ "tech_boom",
+    TRUE ~ "other"
+  ))
+
+
+# For the goal completion location
+
+goalcc_previous_clean2 <- goalcc_previous_clean %>%
+  mutate(category = case_when(
+    str_detect(goal_completion_location, "/events/")   ~ "events",
+    str_detect(goal_completion_location, "(entrance)") ~ "entrance",
+    str_detect(goal_completion_location, "/blog/")     ~ "blog", 
+    str_detect(goal_completion_location, "/enquire/")  ~ "enqiry",
+    str_detect(goal_completion_location, "/courses/")  ~ "courses",
+    str_detect(goal_completion_location,
+               "/data-analysis-announcement/")  ~ "data",
+    TRUE  ~ "other"
+  ))
+
+# Selecting and Filtering for goal completions
+
+goalcc_comparison <- goalcc_previous_clean2 %>%
+  select(year, month, edin_info_session_click_completions, 
+         glas_info_session_click_completions, 
+         category, previous_step_category) %>%
+  filter(edin_info_session_click_completions >= 1, 
+         glas_info_session_click_completions >= 1) 
+
+
+
+
+
+
