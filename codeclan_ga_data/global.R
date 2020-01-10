@@ -13,84 +13,88 @@ library(DT)
 library(plotly)
 
 # Section 2 - API---------------------------------------------------
-
-
-
-# reloading package
-devtools::reload(pkg = devtools::inst("googleAnalyticsR"))
-
-#Authenticating account
-
-ga_auth()
-
-keyring_lock(keyring = "googleanalytics")
-
-# ----------------------------------------
-# only need this section when sorting website initially - not necessary in production use
-#Get a list of accounts you have access to
-# account_list <- ga_account_list()
+#NO LONGER NEED API CALL AS USING SYNTHESIZED DATA - COMMENTING OUT
+#------------------------------------------------------------------
 # 
-# account_list
+# # reloading package
+# devtools::reload(pkg = devtools::inst("googleAnalyticsR")) 
 # 
-# #ViewID is the way to access the account you want
-# account_list$viewId
-#------------------------------------------
+# #Authenticating account
+# 
+# ga_auth()
+# 
+# keyring_lock(keyring = "googleanalytics") 
+# 
+# # ----------------------------------------
+# # only need this section when sorting website initially - not necessary in production use
+# #Get a list of accounts you have access to
+# # account_list <- ga_account_list()
+# # 
+# # account_list
+# # 
+# # #ViewID is the way to access the account you want
+# # account_list$viewId
+# #------------------------------------------
+# 
+# #Select full CodeClan website data
+# my_ga_id <- 102407343
+# 
+# #Set today's date and year previous for flexible API call
+# today <- today()
+# year_previous <- today() - days(365)
+# 
+# 
+# #Call the API to access the data required for various dashboards
+# dashboard_data <- google_analytics(my_ga_id,
+#                  date_range = c(year_previous, today),
+#                  metrics = c(
+#                    "users",
+#                    "sessions",
+#                    "bounces",
+#                    "bounceRate",
+#                    "exits",
+#                    "exitRate",
+#                    "pageviews",
+#                    "avgTimeOnPage",
+#                    "goal3Completions",
+#                    "goal5Completions"),
+#                  dimensions = c(
+#                    "date",
+#                    "channelGrouping",
+#                    "source",
+#                    "deviceCategory",
+#                    "landingPagePath",
+#                    "secondPagePath",
+#                    "exitPagePath",
+#                    "socialNetwork"
+#                  ),
+#                  max = -1,
+#                  anti_sample = TRUE
+# )
+# 
+# # Had to set up a seperate API call for goal path dimensions because API doesn't work if goal path dimensions are called with channel and traffic source dimensions/metrics
+# 
+# goal_path_data <- google_analytics(my_ga_id,
+#                                    date_range = c(year_previous, today),
+#                                    metrics = c(
+#                                      "goal3Completions",
+#                                      "goal5Completions"
+#                                      ),
+#                                    dimensions = c(
+#                                      "date",
+#                                      "goalCompletionLocation",
+#                                      "goalPreviousStep1",
+#                                      "goalPreviousStep2"
+#                                    ),
+#                                    max = -1,
+#                                    anti_sample = TRUE
+# )
+# 
 
-#Select full CodeClan website data
-my_ga_id <- 102407343
+#import data from synthesized csv's with same filenames as before
 
-#Set today's date and year previous for flexible API call
-today <- today()
-year_previous <- today() - days(365)
-
-
-#Call the API to access the data required for various dashboards
-dashboard_data <- google_analytics(my_ga_id,
-                 date_range = c(year_previous, today),
-                 metrics = c(
-                   "users",
-                   "sessions",
-                   "bounces",
-                   "bounceRate",
-                   "exits",
-                   "exitRate",
-                   "pageviews",
-                   "avgTimeOnPage",
-                   "goal3Completions",
-                   "goal5Completions"),
-                 dimensions = c(
-                   "date",
-                   "channelGrouping",
-                   "source",
-                   "deviceCategory",
-                   "landingPagePath",
-                   "secondPagePath",
-                   "exitPagePath",
-                   "socialNetwork"
-                 ),
-                 max = -1,
-                 anti_sample = TRUE
-)
-
-# Had to set up a seperate API call for goal path dimensions because API doesn't work if goal path dimensions are called with channel and traffic source dimensions/metrics
-
-goal_path_data <- google_analytics(my_ga_id,
-                                   date_range = c(year_previous, today),
-                                   metrics = c(
-                                     "goal3Completions",
-                                     "goal5Completions"
-                                     ),
-                                   dimensions = c(
-                                     "date",
-                                     "goalCompletionLocation",
-                                     "goalPreviousStep1",
-                                     "goalPreviousStep2"
-                                   ),
-                                   max = -1,
-                                   anti_sample = TRUE
-)
-
-
+dashboard_data <- read_csv(here::here("data_synthesis/dashboard_data_syn.csv"))
+goal_path_data <- read_csv(here::here("data_synthesis/goal_path_syn.csv"))
 
 # data cleaning script ----------------------------------------------------
 
