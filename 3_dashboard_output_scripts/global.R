@@ -1,5 +1,5 @@
 
-# Section 1 - Loading libraries-------------------------------------
+# Section 1 - Loading Libraries-------------------------------------
 
 library(googleAnalyticsR)
 library(keyring)
@@ -11,11 +11,13 @@ library(ggthemes)
 library(lubridate)
 library(DT)
 library(plotly)
+library(shiny)
+library(shinydashboard)
 
-# Section 2 - API---------------------------------------------------
-#NO LONGER NEED API CALL AS USING SYNTHESIZED DATA - COMMENTING OUT
-#------------------------------------------------------------------
+# Section 2 - API Call---------------------------------------------------
+# Example of the original GA API call code. However, due to the sensitivity of the data the dashboard is using synthesized data instead
 # 
+#
 # # reloading package
 # devtools::reload(pkg = devtools::inst("googleAnalyticsR")) 
 # 
@@ -24,17 +26,6 @@ library(plotly)
 # ga_auth()
 # 
 # keyring_lock(keyring = "googleanalytics") 
-# 
-# # ----------------------------------------
-# # only need this section when sorting website initially - not necessary in production use
-# #Get a list of accounts you have access to
-# # account_list <- ga_account_list()
-# # 
-# # account_list
-# # 
-# # #ViewID is the way to access the account you want
-# # account_list$viewId
-# #------------------------------------------
 # 
 # #Select full CodeClan website data
 # my_ga_id <- 102407343
@@ -90,29 +81,33 @@ library(plotly)
 #                                    anti_sample = TRUE
 # )
 # 
+# Section 3 - Synthesized Data --------------------------------------------
 
 #import data from synthesized csv's with same filenames as before
 
-dashboard_data <- read_csv(here::here("data_synthesis/dashboard_data_syn.csv"))
-goal_path_data <- read_csv(here::here("data_synthesis/goal_path_syn.csv"))
+dashboard_data <- read_csv(here::here("/2_clean_data/dashboard_data_syn.csv"))
+goal_path_data <- read_csv(here::here("/2_clean_data/goal_path_syn.csv"))
 
-# data cleaning script ----------------------------------------------------
+# Section 4 - Data Cleaning Script ----------------------------------------------------
 
 # Cleaning dashboard data
 
 dashboard_data <- clean_names(dashboard_data)
 
 clean_dashboard_data <- dashboard_data %>%
+  
   # adding year, month, day columns based on date column
   mutate(
     year = year(date),
     month = month(date),
     day = day(date)
     ) %>%
+  
   # converting avg_time_on_page from seconds into user friendly format of hours, minutes and seconds
   mutate(
     avg_time_on_page_period = as.period(avg_time_on_page)
     ) %>%
+  
   # reordering data so year, month, day columns are beside the date column
   select(
     date,
@@ -124,6 +119,7 @@ clean_dashboard_data <- dashboard_data %>%
     goal3completions,
     goal5completions
          ) %>%
+  
   # converting character vectors to lower case
   mutate(
     channel_grouping = str_to_lower(channel_grouping),
@@ -131,6 +127,7 @@ clean_dashboard_data <- dashboard_data %>%
     bounce_rate      = round(bounce_rate, 0),
     exit_rate        = round(exit_rate, 0)
     ) %>%
+  
   # renaming columns to help user better understand the data
   rename (
     edin_info_session_click_completions = goal5completions,
@@ -145,12 +142,14 @@ clean_dashboard_data <- dashboard_data %>%
 goal_path_data <- clean_names(goal_path_data)
 
 clean_goal_path_data <- goal_path_data %>%
+  
   # adding year, month, day columns based on date column
   mutate(
     year = year(date),
     month = month(date),
     day = day(date)
   ) %>%
+  
   # reordering data so year, month, day columns are beside the date column
   select(
     date,
@@ -164,7 +163,7 @@ clean_goal_path_data <- goal_path_data %>%
     glas_info_session_click_completions = goal3completions
   )
 
-# Section 3 - colour pallete---------------------------------------------------
+# Section 5 - Colour Pallete---------------------------------------------------
 # codeclan corporate colour pallete
 codeclan_colours <- c(
   `codeclan dark blue` = "#1b3445",
@@ -178,9 +177,8 @@ codeclan_colours <- c(
 
 # Any changes to these colours, or addition of new colours, are done in the above vector.
 
-# Tip: use back ticks to remove naming restrictions (e.g. to include spaces for `light grey` and `dark grey`).
-
 # Function that extracts the hex codes from this vector by name.
+
 codeclan_cols <- function(...) {
   cols <- c(...)
 
@@ -194,24 +192,15 @@ codeclan_cols <- function(...) {
 # codeclan_cols()
 # codeclan_cols("codeclan gold", "codeclan light blue")
 
-# Combine colours into palettes
-
-# Codeclan has a few main colours, but the full list (above) includes other official colours used for a variety of purposes. So we can now create palettes (various combinations) of these colours. Similar to how we deal with colours, first define a list like such:
 
 codeclan_palettes <- list(
   `main`  = codeclan_cols("codeclan light blue", "codeclan dark blue", "codeclan gold"),
   `cool`  = codeclan_cols("codeclan dark blue", "codeclan light blue", "codeclan other blue"),
   `hot`   = codeclan_cols("codeclan gold", "codeclan red", "codeclan pink"),
   `mixed` = codeclan_cols("codeclan gold","codeclan light blue", "codeclan other blue","codeclan dark blue", "codeclan dark grey", "codeclan light grey", "codeclan pink"),
-  `grey`  = codeclan_cols("codeclan light grey", "codeclan dark grey")
+  `grey`  = codeclan_cols("codeclan light grey", "codeclan dark grey"),
+  `one_tone` = codeclan_cols("codeclan light blue")
 )
-
-# Changes or new colour palettes are added in this list. We write a function to access and interpolate them like so:
-
-# Return function to interpolate a example color palette
-#' @param palette Character name of palette in example_palettes
-#' @param reverse Boolean indicating whether the palette should be reversed
-#' @param ... Additional arguments to pass to colorRampPalette()
 
 codeclan_pal <- function(palette = "main", reverse = FALSE, ...) {
   pal <- codeclan_palettes[[palette]]
@@ -223,20 +212,7 @@ codeclan_pal <- function(palette = "main", reverse = FALSE, ...) {
 
 # This function gets a pallete by name from the list ("main" by default), has a boolean condition determining whether to reverse the order or not, and additional arguments to pass on to colorRampPallete() (such as an alpha value). This returns another function:
 
-# This returned function will interpolate the palette colours for a certain number of levels, making it possible to create shades between our original colours.
-
-# This is what we need to create custom ggplot2 scales.
-
 # Scales for ggplot2
-
-# We can now create custom colour and fill scale functions for ggplot2.
-# Colour scale constructor for codeclan colours
-
-#' @param palette Character name of palette in example_palettes
-#' @param discrete Boolean indicating whether color aesthetic is discrete or not
-#' @param reverse Boolean indicating whether the palette should be reversed
-#' @param ... Additional arguments passed to discrete_scale() or
-#'            scale_color_gradientn(), used respectively when discrete is TRUE or FALSE
 
 scale_color_codeclan <- function(palette = "main", discrete = TRUE, reverse = FALSE, ...) {
   pal <- codeclan_pal(palette = palette, reverse = reverse)
@@ -248,13 +224,7 @@ scale_color_codeclan <- function(palette = "main", discrete = TRUE, reverse = FA
   }
 }
 
-#' Fill scale constructor for codeclan colours
-
-#' @param palette Character name of palette in codeclan_palettes
-#' @param discrete Boolean indicating whether colour aesthetic is discrete or not
-#' @param reverse Boolean indicating whether the palette should be reversed
-#' @param ... Additional arguments passed to discrete_scale() or
-#'            scale_fill_gradientn(), used respectively when discrete is TRUE or FALSE
+# Fill scale constructor for codeclan colours
 
 scale_fill_codeclan <- function(palette = "main", discrete = TRUE, reverse = FALSE, ...) {
   pal <- codeclan_pal(palette = palette, reverse = reverse)
@@ -266,35 +236,13 @@ scale_fill_codeclan <- function(palette = "main", discrete = TRUE, reverse = FAL
   }
 }
 
-# Each of these functions specifies a palette, whether the palette is being applied based on a discrete or numeric variable, whether to reverse the palette colors, and additional arguments to pass to the relevant ggplot2 function (which differs for discrete or numeric mapping).
-
-# Examples.
-#
-# # Colour by discrete variable using default palette
-# ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +
-#   geom_point(size = 4) +
-#   scale_color_codeclan()
-#
-# # Colour by numeric variable with cool palette
-# ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Sepal.Length)) +
-#   geom_point(size = 4, alpha = .6) +
-#   scale_color_codeclan(discrete = FALSE, palette = "cool")
-#
-# # Fill by discrete variable with different palette + remove legend (guide)
-# ggplot(mpg, aes(manufacturer, fill = manufacturer)) +
-#   geom_bar() +
-#   theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-#   scale_fill_codeclan(palette = "mixed", guide = "none")
 
 
-
-
-# Section Goal Completion by Page---------------------------------------------------
+# Section 6 - Goal Completion by Page Data Cleaning---------------------------------------------------
 ## Wrangling
 
-
-
 # Selecting variables for Goal 3 (glas_info_session_click_completions)
+
 # completions by page
 goal3cc <- clean_goal_path_data  %>%
   select(date, year, month, day, glas_info_session_click_completions, 
@@ -315,6 +263,7 @@ goal3cc_test1 <- goal3cc %>%
   ))
 
 # Selecting variables for Goal 5 (edin_info_session_click_completions)
+
 # completions by page
 
 goal5cc <- clean_goal_path_data  %>%
@@ -335,7 +284,6 @@ goal5cc_test1 <- goal5cc %>%
                "/data-analysis-announcement/")  ~ "data",
     TRUE  ~ "other"
   ))
-
 
 
 # Selecting variables for Goal Completions after Previous Step
@@ -400,14 +348,11 @@ goalcc_comparison <- goalcc_previous_clean2 %>%
          glas_info_session_click_completions >= 1) 
 
 
-
-
-
-
-
-# data cleaning for user journey dashboard --------------------------------
+# Section 7 - User Journey Dashboard Data Cleaning --------------------------------
 
 # data cleaning for behaviour flow
+
+# Selecting the relevant columns for the dashboard
 
 behaviour_flow <- clean_dashboard_data %>%
   select(
@@ -422,6 +367,13 @@ behaviour_flow <- clean_dashboard_data %>%
     edin_info_session_click_completions,
     glas_info_session_click_completions
   ) %>%
+  mutate(
+    landing_page_path = if_else(landing_page_path == "/", "homepage", landing_page_path),
+    second_page_path = if_else(second_page_path == "(not set)", "**user exited the site**", second_page_path)
+  ) %>%
+  
+  # Grouping and summarising the data so that it looks better visually in the dashboard and not as granular
+  
   group_by(
     "channel" = channel_grouping,
     "device" = device_category,
@@ -435,18 +387,37 @@ behaviour_flow <- clean_dashboard_data %>%
     edin_info_session_click_completions = sum(edin_info_session_click_completions),
     glas_info_session_click_completions = sum(glas_info_session_click_completions)
     ) %>%
+  
+  # Setting filters to refine the data that is coming into the dashboard so it is more insightful for the users:
+  # Excluding blog pages and internal business pages that are not for public use
+  # pages that have 10 sessions or more
+  
   filter(
     str_detect(landing_page_path, "/blog/", negate = TRUE),
     sessions >= 10,
     landing_page_path != "/pre-course-work/",
     landing_page_path != "/admissions-track/",
     second_page_path != "/admissions-track/") %>%
+  arrange(desc(sessions)) %>%
+  
+  # Renaming columns so they are more user friendly in the dashboard
   rename(
-    entry_page = landing_page_path,
-    "goal clicks (ed)" = edin_info_session_click_completions,
-    "goal clicks (gla)" = glas_info_session_click_completions
+    "entry page"  = landing_page_path,
+    "next page" = second_page_path,
+    "entry page exit"         = bounces,
+    "next page exit"        = exits,
+    "goal conv. (edin)"       = edin_info_session_click_completions,
+    "goal conv. (glas)"       = glas_info_session_click_completions
   ) %>%
-  arrange(desc(sessions))
+  select(
+    sessions,
+    "entry page",
+    "entry page exit",
+    "next page",
+    "next page exit",
+    "goal conv. (edin)",
+    "goal conv. (glas)"
+  )
 
 # data cleaning for entry page engagement table
 entry_page_user_flow <- clean_dashboard_data %>%
@@ -458,6 +429,8 @@ entry_page_user_flow <- clean_dashboard_data %>%
     landing_page_path,
     bounces
   ) %>%
+  mutate(
+  landing_page_path = if_else(landing_page_path == "/", "homepage", landing_page_path)) %>%
   group_by(
     "channel" = channel_grouping,
     "device" = device_category,
@@ -468,7 +441,7 @@ entry_page_user_flow <- clean_dashboard_data %>%
     bounces = sum(bounces),
   ) %>%
   mutate(
-    "bounce rate" = round((bounces/sessions) * 100, 0)
+    "drop off rate (%)" = round((bounces/sessions) * 100, 0)
   ) %>%
   select(
     channel,
@@ -476,7 +449,7 @@ entry_page_user_flow <- clean_dashboard_data %>%
     landing_page_path,
     sessions,
     bounces,
-    "bounce rate"
+    "drop off rate (%)"
   ) %>%
   filter(
     landing_page_path != "/pre-course-work/",
@@ -485,7 +458,11 @@ entry_page_user_flow <- clean_dashboard_data %>%
     sessions >= 10,
     bounces >= 1
   ) %>%
-  arrange(desc(bounces), desc(sessions))
+  arrange(desc(bounces), desc(sessions)) %>%
+  rename(
+    "entry page" = landing_page_path,
+    "drop offs" = bounces
+  )
 
 
 # data cleaning for next page engagement table
@@ -502,6 +479,9 @@ next_page_user_flow <- clean_dashboard_data %>%
     edin_info_session_click_completions,
     glas_info_session_click_completions
   ) %>%
+  mutate(
+    second_page_path = if_else(second_page_path == "/", "homepage", second_page_path)
+  ) %>%
   group_by(
     "channel" = channel_grouping,
     "device" = device_category,
@@ -515,7 +495,7 @@ next_page_user_flow <- clean_dashboard_data %>%
     "info session click (gla)" = sum(glas_info_session_click_completions)
   ) %>%
   mutate(
-    "exit rate" = round((exits / pageviews) * 100, 0)
+    "drop off rate (%)" = round((exits / pageviews) * 100, 0)
   ) %>%
   select(
     channel,
@@ -523,7 +503,7 @@ next_page_user_flow <- clean_dashboard_data %>%
     second_page_path,
     sessions,
     exits,
-    "exit rate",
+    "drop off rate (%)",
   ) %>%
   filter(
     second_page_path != "(not set)",
@@ -532,6 +512,10 @@ next_page_user_flow <- clean_dashboard_data %>%
     sessions >= 10,
     exits >= 1
   ) %>%
-  arrange(desc(sessions), desc(exits))
+  arrange(desc(sessions), desc(exits)) %>%
+  rename(
+    "next page" = second_page_path,
+    "drop offs" = exits
+  )
   
 
