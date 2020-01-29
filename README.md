@@ -6,34 +6,28 @@ We used the Google Analytics API to gather the data for the dashboard, but have 
 
 The dashboard is broken into four sections based on tracking users through to particular goal path pages. The first section provides graphs for tracking the sources from which users successfully reached the goal path pages, separated by channel and social network:
 
-![Screenshot of goal completions by channel]
-(https://raw.githubusercontent.com/keegan-siebken/codeclan_group_dashboard_project/master/readme_images/1_goal_completions_channel.png)
+<img src = "https://raw.githubusercontent.com/keegan-siebken/codeclan_group_dashboard_project/master/readme_images/1_goal_completions_channel.png">
 
 The second section tracks goal completions by previous page:  
 
-![Screenshot of goal completions by page]
-(readme_images/2_goal_completions_page.png)
+<img src = "https://raw.githubusercontent.com/keegan-siebken/codeclan_group_dashboard_project/master/readme_images/2_goal_completions_page.png">
 
 The third section provides tables for analysing more granular information about user journeys, with many options for filtering the data:  
 
-![Screenshot of user journey tables]
-(readme_images/3_user_journey.png)
+<img src = "https://raw.githubusercontent.com/keegan-siebken/codeclan_group_dashboard_project/master/readme_images/3_user_journey.png">
 
 The final section graphs arrivals to the site in general from various sources: 
 
-![Screenshot of user acquisitions]
-(readme_images/4_user_acquisitions.png)
+<img src = "https://raw.githubusercontent.com/keegan-siebken/codeclan_group_dashboard_project/master/readme_images/4_user_acquisitions.png">
 
 
 ## Getting Started
 
 To run the dashboard: download all folders and files in the repo, open global.R in RStudio and click the Run App button:
 
-![Screenshot of global.R directory structure]
-(readme_images/global_r_file.png)
+<img src = "https://raw.githubusercontent.com/keegan-siebken/codeclan_group_dashboard_project/master/readme_images/global_r_file.png">
 
-![Screenshot of rstudio run app button]
-(readme_images/r_studio_screenshot.png)
+<img src = "https://raw.githubusercontent.com/keegan-siebken/codeclan_group_dashboard_project/master/readme_images/r_studio_screenshot.png">
 
 
 ### Prerequisites
