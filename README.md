@@ -7,7 +7,7 @@ We used the Google Analytics API to gather the data for the dashboard, but have 
 The dashboard is broken into four sections based on tracking users through to particular goal path pages. The first section provides graphs for tracking the sources from which users successfully reached the goal path pages, separated by channel and social network:
 
 ![Screenshot of goal completions by channel]
-(hhttps://raw.githubusercontent.com/keegan-siebken/codeclan_group_dashboard_project/master/readme_images/1_goal_completions_channel.png)
+(https://raw.githubusercontent.com/keegan-siebken/codeclan_group_dashboard_project/master/readme_images/1_goal_completions_channel.png)
 
 The second section tracks goal completions by previous page:  
 
