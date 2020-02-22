@@ -27,7 +27,7 @@ library(shinydashboard)
 # 
 # keyring_lock(keyring = "googleanalytics") 
 # 
-# #Select full CodeClan website data
+# #Select full website data
 # my_ga_id <- 102407343
 # 
 # #Set today's date and year previous for flexible API call
@@ -164,46 +164,46 @@ clean_goal_path_data <- goal_path_data %>%
   )
 
 # Section 5 - Colour Pallete---------------------------------------------------
-# codeclan corporate colour pallete
-codeclan_colours <- c(
-  `codeclan dark blue` = "#1b3445",
-  `codeclan light blue` = "#4da2cd",
-  `codeclan other blue` = "#4ca1cd",
-  `codeclan gold`     = "#e1bf76",
-  `codeclan pink` = "#e74b7d",
-  `codeclan red` = "red",
-  `codeclan light grey` = "#cccccc",
-  `codeclan dark grey`  = "#8c8c8c")
+# corporate colour pallete
+corporate_colours <- c(
+  `corporate dark blue` = "#1b3445",
+  `corporate light blue` = "#4da2cd",
+  `corporate other blue` = "#4ca1cd",
+  `corporate gold`     = "#e1bf76",
+  `corporate pink` = "#e74b7d",
+  `corporate red` = "red",
+  `corporate light grey` = "#cccccc",
+  `corporate dark grey`  = "#8c8c8c")
 
 # Any changes to these colours, or addition of new colours, are done in the above vector.
 
 # Function that extracts the hex codes from this vector by name.
 
-codeclan_cols <- function(...) {
+corporate_cols <- function(...) {
   cols <- c(...)
 
   if (is.null(cols))
-    return (codeclan_colours)
+    return (corporate_colours)
 
-  codeclan_colours[cols]
+  corporate_colours[cols]
 }
 
 # This allows us to get hex colors in a robust and flexible way. For example, you can have all colours returned as they are, specify certain colours, in a particular order, add additional function arguments and checks, and so on:
-# codeclan_cols()
-# codeclan_cols("codeclan gold", "codeclan light blue")
+# corporate_cols()
+# corporate_cols("corporate gold", "corporate light blue")
 
 
-codeclan_palettes <- list(
-  `main`  = codeclan_cols("codeclan light blue", "codeclan dark blue", "codeclan gold"),
-  `cool`  = codeclan_cols("codeclan dark blue", "codeclan light blue", "codeclan other blue"),
-  `hot`   = codeclan_cols("codeclan gold", "codeclan red", "codeclan pink"),
-  `mixed` = codeclan_cols("codeclan gold","codeclan light blue", "codeclan other blue","codeclan dark blue", "codeclan dark grey", "codeclan light grey", "codeclan pink"),
-  `grey`  = codeclan_cols("codeclan light grey", "codeclan dark grey"),
-  `one_tone` = codeclan_cols("codeclan light blue")
+corporate_palettes <- list(
+  `main`  = corporate_cols("corporate light blue", "corporate dark blue", "corporate gold"),
+  `cool`  = corporate_cols("corporate dark blue", "corporate light blue", "corporate other blue"),
+  `hot`   = corporate_cols("corporate gold", "corporate red", "corporate pink"),
+  `mixed` = corporate_cols("corporate gold","corporate light blue", "corporate other blue","corporate dark blue", "corporate dark grey", "corporate light grey", "corporate pink"),
+  `grey`  = corporate_cols("corporate light grey", "corporate dark grey"),
+  `one_tone` = corporate_cols("corporate light blue")
 )
 
-codeclan_pal <- function(palette = "main", reverse = FALSE, ...) {
-  pal <- codeclan_palettes[[palette]]
+corporate_pal <- function(palette = "main", reverse = FALSE, ...) {
+  pal <- corporate_palettes[[palette]]
 
   if (reverse) pal <- rev(pal)
 
@@ -214,8 +214,8 @@ codeclan_pal <- function(palette = "main", reverse = FALSE, ...) {
 
 # Scales for ggplot2
 
-scale_color_codeclan <- function(palette = "main", discrete = TRUE, reverse = FALSE, ...) {
-  pal <- codeclan_pal(palette = palette, reverse = reverse)
+scale_color_corporate <- function(palette = "main", discrete = TRUE, reverse = FALSE, ...) {
+  pal <- corporate_pal(palette = palette, reverse = reverse)
 
   if (discrete) {
     discrete_scale("colour", paste0("example_", palette), palette = pal, ...)
@@ -224,10 +224,10 @@ scale_color_codeclan <- function(palette = "main", discrete = TRUE, reverse = FA
   }
 }
 
-# Fill scale constructor for codeclan colours
+# Fill scale constructor for corporate colours
 
-scale_fill_codeclan <- function(palette = "main", discrete = TRUE, reverse = FALSE, ...) {
-  pal <- codeclan_pal(palette = palette, reverse = reverse)
+scale_fill_corporate <- function(palette = "main", discrete = TRUE, reverse = FALSE, ...) {
+  pal <- corporate_pal(palette = palette, reverse = reverse)
 
   if (discrete) {
     discrete_scale("fill", paste0("example_", palette), palette = pal, ...)
@@ -305,8 +305,8 @@ goalcc_previous_clean <-goalcc_previous %>%
     str_detect(goal_previous_step1, "/enquire/") ~ "enqiry",
     str_detect(goal_previous_step1, "/courses/") ~ "courses",
     str_detect(goal_previous_step1, "/about-us/") ~ "about_us",
-    str_detect(goal_previous_step1, "/codeclan-store/") ~
-      "codeclan_store",
+    str_detect(goal_previous_step1, "/corporate-store/") ~
+      "corporate_store",
     str_detect(goal_previous_step1, "/for-employers/") ~
       "for_employers",
     str_detect(goal_previous_step1, "/highlands-academy/") ~
@@ -314,8 +314,8 @@ goalcc_previous_clean <-goalcc_previous %>%
     str_detect(goal_previous_step1, "/pre-course-work") ~
       "pre_course_work",
     str_detect(goal_previous_step1, "/ourbrand/") ~ "our_brand",
-    str_detect(goal_previous_step1, "/the-codeclan-experience") ~
-      "codeclan_experience",
+    str_detect(goal_previous_step1, "/the-corporate-experience") ~
+      "corporate_experience",
     str_detect(goal_previous_step1, "/our-board/") ~ "our_board",
     str_detect(goal_previous_step1, "/admissions-track") ~
       "admissions",

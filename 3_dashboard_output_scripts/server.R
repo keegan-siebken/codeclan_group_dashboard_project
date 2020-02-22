@@ -45,7 +45,7 @@ server <- function(input, output) {
           colour = "Channel"
         ) +
         theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-        scale_color_codeclan(discrete = TRUE, palette = "mixed")
+        scale_color_corporate(discrete = TRUE, palette = "mixed")
       ggplotly(month_plot)
     } else {
       channel_day <- goal_channel_dashboard_data_filtered() %>%
@@ -74,7 +74,7 @@ server <- function(input, output) {
           colour = "Channel"
         ) +
         theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-        scale_color_codeclan(discrete = TRUE, palette = "mixed")
+        scale_color_corporate(discrete = TRUE, palette = "mixed")
       ggplotly(day_plot)
     }
   })
@@ -142,7 +142,7 @@ server <- function(input, output) {
           colour = "Social Network"
         ) +
         theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-        scale_color_codeclan(discrete = TRUE, palette = "mixed")
+        scale_color_corporate(discrete = TRUE, palette = "mixed")
       ggplotly(social_month_plot)
     } else {
       social_day <- social_channel_dashboard_data_filtered() %>%
@@ -174,7 +174,7 @@ server <- function(input, output) {
           colour = "Social Network"
         ) +
         theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-        scale_color_codeclan(discrete = TRUE, palette = "mixed")
+        scale_color_corporate(discrete = TRUE, palette = "mixed")
       ggplotly(social_day_plot)
     }
   })
@@ -255,7 +255,7 @@ server <- function(input, output) {
         y = "Glasgow Click Completions",
         title = "Glasgow Event Clicks by Page Category"
       ) +
-      scale_fill_codeclan() +
+      scale_fill_corporate() +
       theme(legend.position = "none")
   })
 
@@ -271,7 +271,7 @@ server <- function(input, output) {
         y = "Edinburgh Click Completions",
         title = "Edinburgh Event Clicks by Page Category"
       ) +
-      scale_fill_codeclan() +
+      scale_fill_corporate() +
       theme(legend.position = "none")
   })
 
@@ -297,7 +297,7 @@ server <- function(input, output) {
         y = "Glasgow Click Completions",
         title = "Previous Page Category before Glasgow Event Clicks"
       ) +
-      scale_fill_codeclan() +
+      scale_fill_corporate() +
       theme(legend.position = "none")
   })
 
@@ -323,7 +323,7 @@ server <- function(input, output) {
         y = "Edinburgh Click Completions",
         title = "Previous Page Category before Edinburgh Event Clicks"
       ) +
-      scale_fill_codeclan() +
+      scale_fill_corporate() +
       theme(legend.position = "none")
   })
 
@@ -422,7 +422,7 @@ server <- function(input, output) {
       ) +
       theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
       scale_x_date(breaks = "1 month", labels = scales::date_format("%Y-%m-%d")) +
-      scale_color_codeclan(discrete = TRUE, palette = "main"))
+      scale_color_corporate(discrete = TRUE, palette = "main"))
   })
 
   users_by_device_by_month <- reactive({
@@ -446,7 +446,7 @@ server <- function(input, output) {
       theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
       scale_y_continuous(labels = scales::comma) +
       scale_x_date(breaks = "1 month", labels = scales::date_format("%Y-%m")) +
-      scale_fill_codeclan(discrete = TRUE, palette = "main"))
+      scale_fill_corporate(discrete = TRUE, palette = "main"))
   })
 
   # Users by Channel server code
@@ -469,7 +469,7 @@ server <- function(input, output) {
       ) +
       theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
       scale_x_date(breaks = "1 month", labels = scales::date_format("%Y-%m-%d")) +
-      scale_color_codeclan(discrete = TRUE, palette = "mixed"))
+      scale_color_corporate(discrete = TRUE, palette = "mixed"))
   })
 
   users_by_channel_by_month <- reactive({
@@ -493,6 +493,6 @@ server <- function(input, output) {
       theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
       scale_y_continuous(labels = scales::comma) +
       scale_x_date(breaks = "1 month", labels = scales::date_format("%Y-%m")) +
-      scale_fill_codeclan(discrete = TRUE, palette = "mixed"))
+      scale_fill_corporate(discrete = TRUE, palette = "mixed"))
   })
 }

@@ -35,7 +35,7 @@ keyring_lock(keyring = "googleanalytics")
 # account_list$viewId
 #------------------------------------------
 
-#Select full CodeClan website data
+#Select full website data
 my_ga_id <- 102407343
 
 #Set today's date and year previous for flexible API call

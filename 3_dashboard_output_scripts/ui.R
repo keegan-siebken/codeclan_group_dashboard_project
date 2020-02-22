@@ -2,7 +2,7 @@ ui <- dashboardPage(
   skin = "black",
   
   dashboardHeader(
-    title = div("CodeClan website navigation analytics",
+    title = div("Company website navigation analytics",
                 style = "color: #1b3445; 
                                     font-size: 20px; 
                                     text-align: left"
@@ -152,7 +152,7 @@ ui <- dashboardPage(
         tabName = "goal_page",
         fluidRow(
           tabBox(
-            title = tagList(shiny::icon("clipboard-check"), "Where Users Click on Events on the CodeClan Website"), 
+            title = tagList(shiny::icon("clipboard-check"), "Where Users Click on Events on the corporate Website"), 
             width = 12, height = "400px",
             tabPanel("Glasgow",
                      plotOutput("goal3cc_test1_plot", height = "300px"),
@@ -211,7 +211,7 @@ ui <- dashboardPage(
                   3,
                   checkboxInput(
                     inputId = "not_set",
-                    label = "exclude journeys that exit the CodeClan website",
+                    label = "exclude journeys that exit the corporate website",
                     value = FALSE
                   )
                 )
@@ -325,7 +325,7 @@ ui <- dashboardPage(
           infoBoxOutput("total_number_sessions_Box"),
           infoBoxOutput("mean_bounce_rate_Box"),
           tabBox(
-            title = tagList(shiny::icon("walking"), "How users arrive on the CodeClan website"), width = 12, height = "870px",
+            title = tagList(shiny::icon("walking"), "How users arrive on the corporate website"), width = 12, height = "870px",
             
             # User acquisition by channel tab
             tabPanel("by channel",
